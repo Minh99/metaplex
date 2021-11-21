@@ -16,13 +16,13 @@ import { ConnectButton } from '@oyster/common';
 const getDefaultLinkActions = (connected: boolean) => {
   return [
     <Link to={`/`} key={'explore'}>
-      <Button className="app-btn">Explore</Button>
+      <Button className="app-btn">Thị Trường NFT</Button>
     </Link>,
     <Link to={`/artworks`} key={'artwork'}>
-      <Button className="app-btn">{connected ? 'My Items' : 'Artwork'}</Button>
+      <Button className="app-btn">{connected ? 'NFT của tôi' : 'Artwork'}</Button>
     </Link>,
     <Link to={`/artists`} key={'artists'}>
-      <Button className="app-btn">Creators</Button>
+      <Button className="app-btn">Ngươì sáng taọ</Button>
     </Link>,
   ];
 };
@@ -108,8 +108,9 @@ const MetaplexMenu = () => {
 
 export const LogoLink = () => {
   return (
-    <Link to={`/`}>
-      <img src={'/metaplex-logo.svg'} />
+    <Link to={`/`} style={{ fontSize: '2rem' }}>
+      {/* <img src={'/metaplex-logo.svg'} /> */}
+      AUCTION NFT
     </Link>
   );
 };

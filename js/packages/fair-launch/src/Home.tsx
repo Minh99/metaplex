@@ -664,7 +664,7 @@ const Home = (props: HomeProps) => {
                 }
                 desc={'Candy Time 🍬 🍬 🍬'}
                 date={candyMachine?.state.goLiveDate}
-                status="LIVE"
+                status="Đang diễn ra"
               />
             )}
 

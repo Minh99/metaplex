@@ -123,7 +123,7 @@ export const ArtView = () => {
             </Row>
             <Row>
               <Col>
-                <h6 style={{ marginTop: 5 }}>Created By</h6>
+                <h6 style={{ marginTop: 5 }}>ĐƯỢC TẠO BỞI</h6>
                 <div className="creators">
                   {(art.creators || []).map((creator, idx) => {
                     return (
@@ -174,7 +174,7 @@ export const ArtView = () => {
             </Row>
             <Row>
               <Col>
-                <h6 style={{ marginTop: 5 }}>Edition</h6>
+                <h6 style={{ marginTop: 5 }}>PHIÊN BẢN</h6>
                 <div className="art-edition">{badge}</div>
               </Col>
             </Row>

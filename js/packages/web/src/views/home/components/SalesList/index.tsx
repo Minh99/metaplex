@@ -54,21 +54,22 @@ export const SalesListView = () => {
                 <TabPane
                   tab={
                     <>
-                      <span className="live"></span> Live
+                      <span className="Đang diễn ra"></span> Live
                     </>
                   }
                   key={LiveAuctionViewState.All}
                 ></TabPane>
                 {hasResaleAuctions && (
                   <TabPane
-                    tab="Secondary Marketplace"
+                    tab="Thị trường thứ cấp"
                     key={LiveAuctionViewState.Resale}
                   ></TabPane>
                 )}
-                <TabPane tab="Ended" key={LiveAuctionViewState.Ended}></TabPane>
+                <TabPane tab="
+Đã kết thúc" key={LiveAuctionViewState.Ended}></TabPane>
                 {connected && (
                   <TabPane
-                    tab="Participated"
+                    tab="Đã tham gia"
                     key={LiveAuctionViewState.Participated}
                   ></TabPane>
                 )}
