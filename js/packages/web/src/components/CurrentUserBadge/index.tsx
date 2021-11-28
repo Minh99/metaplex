@@ -29,6 +29,11 @@ const btnStyle: React.CSSProperties = {
   height: 40,
 };
 
+const btnStyleHide: React.CSSProperties = {
+  border: 'none',
+  height: 40,
+  display: 'none'
+};
 const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
   const { wallet, publicKey } = useWallet();
   const { whitelistedCreatorsByCreator, store } = useMeta();
@@ -104,6 +109,7 @@ const AddFundsModal = (props: {
 }) => {
   return (
     <MetaplexModal
+    
       visible={props.showAddFundsModal}
       onCancel={() => props.setShowAddFundsModal(false)}
       title="Add Funds"
@@ -297,7 +303,7 @@ export const CurrentUserBadge = (props: {
                   <Button
                     className="metaplex-button-default"
                     onClick={() => setShowAddFundsModal(true)}
-                    style={btnStyle}
+                    style={btnStyleHide}
                   >
                     Add Funds
                   </Button>
@@ -330,12 +336,15 @@ export const CurrentUserBadge = (props: {
           )}
         </Button>
       </Popover>
+      <div style={{display:'none'}}>
       <AddFundsModal
         setShowAddFundsModal={setShowAddFundsModal}
         showAddFundsModal={showAddFundsModal}
         publicKey={publicKey}
         balance={balance}
+        
       />
+      </div>
     </div>
   );
 };

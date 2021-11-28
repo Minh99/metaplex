@@ -54,14 +54,14 @@ export const SalesListView = () => {
                 <TabPane
                   tab={
                     <>
-                      <span className="live"></span> Live
+                      <span className="live"></span> Đang Diễn Ra
                     </>
                   }
                   key={LiveAuctionViewState.All}
                 ></TabPane>
                 {hasResaleAuctions && (
                   <TabPane
-                    tab="Secondary Marketplace"
+                    tab="Đang Rao Bán"
                     key={LiveAuctionViewState.Resale}
                   ></TabPane>
                 )}

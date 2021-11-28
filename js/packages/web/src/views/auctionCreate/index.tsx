@@ -715,13 +715,10 @@ const CategoryStep = (props: {
     <>
       <Row className="call-to-action">
         <h2>List an item</h2>
-        <p>
-          First time listing on Metaplex? <a>Read our sellers' guide.</a>
-        </p>
       </Row>
-      <Row justify={width < 768 ? 'center' : 'start'}>
+      <Row justify={width < 768 ? 'center' : 'start'} >
         <Col>
-          <Row>
+          <Row >
             <Button
               className="type-btn"
               size="large"
@@ -735,7 +732,7 @@ const CategoryStep = (props: {
               </div>
             </Button>
           </Row>
-          <Row>
+          <Row >
             <Button
               className="type-btn"
               size="large"
@@ -749,7 +746,7 @@ const CategoryStep = (props: {
               </div>
             </Button>
           </Row>
-          <Row>
+          <Row >
             <Button
               className="type-btn"
               size="large"
@@ -763,7 +760,7 @@ const CategoryStep = (props: {
               </div>
             </Button>
           </Row>
-          <Row>
+          <Row >
             <Button
               className="type-btn"
               size="large"
@@ -1965,6 +1962,7 @@ const ReviewStep = (props: {
                   .format('dddd, MMMM Do YYYY, h:mm a')
               : 'Until sold'
           }
+          style={{'margin':3}}
         />
       </Row>
       <Row>
@@ -2067,6 +2065,8 @@ const Congrats = (props: {
           <Button
             className="metaplex-button"
             onClick={_ => window.open(newTweetURL(), '_blank')}
+            
+
           >
             <span>Share it on Twitter</span>
             <span>&gt;</span>

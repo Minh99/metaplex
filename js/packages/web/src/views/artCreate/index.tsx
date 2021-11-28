@@ -240,10 +240,6 @@ const CategoryStep = (props: {
     <>
       <Row className="call-to-action">
         <h2>Create a new item</h2>
-        <p>
-          First time creating on Metaplex?{' '}
-          <a href="#">Read our creators’ guide.</a>
-        </p>
       </Row>
       <Row justify={width < 768 ? 'center' : 'start'}>
         <Col>
@@ -259,54 +255,56 @@ const CategoryStep = (props: {
               </div>
             </Button>
           </Row>
-          <Row>
-            <Button
-              className="type-btn"
-              size="large"
-              onClick={() => props.confirm(MetadataCategory.Video)}
-            >
-              <div>
-                <div>Video</div>
-                <div className="type-btn-description">MP4, MOV</div>
-              </div>
-            </Button>
-          </Row>
-          <Row>
-            <Button
-              className="type-btn"
-              size="large"
-              onClick={() => props.confirm(MetadataCategory.Audio)}
-            >
-              <div>
-                <div>Audio</div>
-                <div className="type-btn-description">MP3, WAV, FLAC</div>
-              </div>
-            </Button>
-          </Row>
-          <Row>
-            <Button
-              className="type-btn"
-              size="large"
-              onClick={() => props.confirm(MetadataCategory.VR)}
-            >
-              <div>
-                <div>AR/3D</div>
-                <div className="type-btn-description">GLB</div>
-              </div>
-            </Button>
-          </Row>
-          <Row>
-            <Button
-              className="type-btn"
-              size="large"
-              onClick={() => props.confirm(MetadataCategory.HTML)}
-            >
-              <div>
-                <div>HTML Asset</div>
-                <div className="type-btn-description">HTML</div>
-              </div>
-            </Button>
-          </Row>
+          <div style={{ display: 'none' }}>
+            <Row>
+              <Button
+                className="type-btn"
+                size="large"
+                onClick={() => props.confirm(MetadataCategory.Video)}
+              >
+                <div>
+                  <div>Video</div>
+                  <div className="type-btn-description">MP4, MOV</div>
+                </div>
+              </Button>
+            </Row>
+            <Row>
+              <Button
+                className="type-btn"
+                size="large"
+                onClick={() => props.confirm(MetadataCategory.Audio)}
+              >
+                <div>
+                  <div>Audio</div>
+                  <div className="type-btn-description">MP3, WAV, FLAC</div>
+                </div>
+              </Button>
+            </Row>
+            <Row>
+              <Button
+                className="type-btn"
+                size="large"
+                onClick={() => props.confirm(MetadataCategory.VR)}
+              >
+                <div>
+                  <div>AR/3D</div>
+                  <div className="type-btn-description">GLB</div>
+                </div>
+              </Button>
+            </Row>
+            <Row>
+              <Button
+                className="type-btn"
+                size="large"
+                onClick={() => props.confirm(MetadataCategory.HTML)}
+              >
+                <div>
+                  <div>HTML Asset</div>
+                  <div className="type-btn-description">HTML</div>
+                </div>
+              </Button>
+            </Row>
+          </div>
         </Col>
       </Row>
     </>
@@ -377,20 +375,16 @@ const UploadStep = (props: {
   return (
     <>
       <Row className="call-to-action">
-        <h2>Now, let's upload your creation</h2>
+        <h2>Upload your item's image</h2>
         <p style={{ fontSize: '1.2rem' }}>
-          Your file will be uploaded to the decentralized web via Arweave.
-          Depending on file type, can take up to 1 minute. Arweave is a new type
-          of storage that backs data with sustainable and perpetual endowments,
-          allowing users and developers to truly store data forever – for the
-          very first time.
+          Depending on file type, can take up to 1 minute.
         </p>
       </Row>
-      <Row className="content-action">
+      <Row className="content-action" >
         <h3>Upload a cover image (PNG, JPG, GIF, SVG)</h3>
         <Dragger
           accept=".png,.jpg,.gif,.mp4,.svg"
-          style={{ padding: 20, background: 'rgba(255, 255, 255, 0.08)' }}
+          style={{ padding: 20, background: 'rgba(255, 255, 255, 0.08)'}}
           multiple={false}
           customRequest={info => {
             // dont upload files here, handled outside of the control
@@ -408,8 +402,7 @@ const UploadStep = (props: {
 
             if (sizeKB < 25) {
               setCoverArtError(
-                `The file ${file.name} is too small. It is ${
-                  Math.round(10 * sizeKB) / 10
+                `The file ${file.name} is too small. It is ${Math.round(10 * sizeKB) / 10
                 }KB but should be at least 25KB.`,
               );
               return;
@@ -419,7 +412,7 @@ const UploadStep = (props: {
             setCoverArtError(undefined);
           }}
         >
-          <div className="ant-upload-drag-icon">
+          <div style={{display:'none'}} className="ant-upload-drag-icon">
             <h3 style={{ fontWeight: 700 }}>
               Upload your cover image (PNG, JPG, GIF, SVG)
             </h3>
@@ -470,45 +463,47 @@ const UploadStep = (props: {
           </Dragger>
         </Row>
       )}
-      <Form.Item
-        className={'url-form-action'}
-        style={{
-          width: '100%',
-          flexDirection: 'column',
-          paddingTop: 30,
-          marginBottom: 4,
-        }}
-        label={<h3>OR use absolute URL to content</h3>}
-        labelAlign="left"
-        colon={false}
-        validateStatus={customURLErr ? 'error' : 'success'}
-        help={customURLErr}
-      >
-        <Input
-          disabled={!!mainFile}
-          placeholder="http://example.com/path/to/image"
-          value={customURL}
-          onChange={ev => setCustomURL(ev.target.value)}
-          onFocus={() => setCustomURLErr('')}
-          onBlur={() => {
-            if (!customURL) {
-              setCustomURLErr('');
-              return;
-            }
-
-            try {
-              // Validate URL and save
-              new URL(customURL);
-              setCustomURL(customURL);
-              setCustomURLErr('');
-            } catch (e) {
-              console.error(e);
-              setCustomURLErr('Please enter a valid absolute URL');
-            }
+      <div style={{ display: 'none' }}>
+        <Form.Item
+          className={'url-form-action'}
+          style={{
+            width: '100%',
+            flexDirection: 'column',
+            paddingTop: 30,
+            marginBottom: 4,
           }}
-        />
-      </Form.Item>
-      <Row>
+          label={<h3>OR use absolute URL to content</h3>}
+          labelAlign="left"
+          colon={false}
+          validateStatus={customURLErr ? 'error' : 'success'}
+          help={customURLErr}
+        >
+          <Input
+            disabled={!!mainFile}
+            placeholder="http://example.com/path/to/image"
+            value={customURL}
+            onChange={ev => setCustomURL(ev.target.value)}
+            onFocus={() => setCustomURLErr('')}
+            onBlur={() => {
+              if (!customURL) {
+                setCustomURLErr('');
+                return;
+              }
+
+              try {
+                // Validate URL and save
+                new URL(customURL);
+                setCustomURL(customURL);
+                setCustomURLErr('');
+              } catch (e) {
+                console.error(e);
+                setCustomURLErr('Please enter a valid absolute URL');
+              }
+            }}
+          />
+        </Form.Item>
+      </div>
+      <Row style={{ marginBottom: 5, marginTop: 30 }}>
         <Button
           type="primary"
           size="large"
@@ -630,8 +625,7 @@ const InfoStep = (props: {
       <Row className="call-to-action">
         <h2>Describe your item</h2>
         <p>
-          Provide detailed description of your creative process to engage with
-          your audience.
+          Provide detailed description of your Item
         </p>
       </Row>
       <Row className="content-action" justify="space-around">
@@ -711,10 +705,10 @@ const InfoStep = (props: {
               className="royalties-input"
             />
           </label>
-          <label className="action-field">
+          <label className="action-field"  style={{display: 'none'}}>
             <span className="field-title">Attributes</span>
           </label>
-          <Form name="dynamic_attributes" form={form} autoComplete="off">
+          <Form name="dynamic_attributes" form={form} autoComplete="off"  style={{display: 'none'}}>
             <Form.List name="attributes">
               {(fields, { add, remove }) => (
                 <>
@@ -1102,8 +1096,7 @@ const LaunchStep = (props: {
       <Row className="call-to-action">
         <h2>Launch your creation</h2>
         <p>
-          Provide detailed description of your creative process to engage with
-          your audience.
+          Provide detailed description of your item
         </p>
       </Row>
       <Row className="content-action" justify="space-around">
@@ -1261,9 +1254,8 @@ const Congrats = (props: {
   const newTweetURL = () => {
     const params = {
       text: "I've created a new NFT artwork on Metaplex, check it out!",
-      url: `${
-        window.location.origin
-      }/#/art/${props.nft?.metadataAccount.toString()}`,
+      url: `${window.location.origin
+        }/#/art/${props.nft?.metadataAccount.toString()}`,
       hashtags: 'NFT,Crypto,Metaplex',
       // via: "Metaplex",
       related: 'Metaplex,Solana',
@@ -1292,6 +1284,7 @@ const Congrats = (props: {
         <Button
           className="metaplex-button"
           onClick={_ => window.open(newTweetURL(), '_blank')}
+          style={{display:'none'}}
         >
           <span>Share it on Twitter</span>
           <span>&gt;</span>

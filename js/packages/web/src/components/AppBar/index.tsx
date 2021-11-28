@@ -16,13 +16,13 @@ import { ConnectButton } from '@oyster/common';
 const getDefaultLinkActions = (connected: boolean) => {
   return [
     <Link to={`/`} key={'explore'}>
-      <Button className="app-btn">Explore</Button>
+      <Button className="app-btn">Trang chủ</Button>
     </Link>,
     <Link to={`/artworks`} key={'artwork'}>
-      <Button className="app-btn">{connected ? 'My Items' : 'Artwork'}</Button>
+      <Button className="app-btn">{connected ? 'Sản Phẩm Của Tôi' : 'Sản Phẩm'}</Button>
     </Link>,
     <Link to={`/artists`} key={'artists'}>
-      <Button className="app-btn">Creators</Button>
+      <Button className="app-btn">Người Sáng Tạo</Button>
     </Link>,
   ];
 };
@@ -34,6 +34,7 @@ const DefaultActions = ({ vertical = false }: { vertical?: boolean }) => {
       style={{
         display: 'flex',
         flexDirection: vertical ? 'column' : 'row',
+        lineHeight: '0'
       }}
     >
       {getDefaultLinkActions(connected)}
@@ -50,7 +51,7 @@ const MetaplexMenu = () => {
     return (
       <>
         <Modal
-          title={<img src={'/metaplex-logo.svg'} />}
+          // title={<img src={'/metaplex-logo.svg'} />}
           visible={isModalVisible}
           footer={null}
           className={'modal-box'}
@@ -109,7 +110,7 @@ const MetaplexMenu = () => {
 export const LogoLink = () => {
   return (
     <Link to={`/`}>
-      <img src={'/metaplex-logo.svg'} />
+      <h1 style={{color:'black', margin:'0', fontSize: '42px'}}>MVD</h1> 
     </Link>
   );
 };

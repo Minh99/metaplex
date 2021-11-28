@@ -17,6 +17,8 @@ export const ArtistView = () => {
     500: 1,
   };
 
+  console.log(creator);
+  
   const artworkGrid = (
     <Masonry
       breakpointCols={breakpointColumnsObj}
@@ -25,13 +27,14 @@ export const ArtistView = () => {
     >
       {artwork.length > 0
         ? artwork.map((m, idx) => {
-            const id = m.pubkey;
-            return (
-              <Link to={`/art/${id}`} key={idx}>
-                <ArtCard key={id} pubkey={m.pubkey} preview={false} />
-              </Link>
-            );
-          })
+          const id = m.pubkey;
+          
+          return (
+            <Link to={`/art/${id}`} key={idx}>
+              <ArtCard key={id} pubkey={m.pubkey} preview={false} />
+            </Link>
+          );
+        })
         : [...Array(6)].map((_, idx) => <CardLoader key={idx} />)}
     </Masonry>
   );
@@ -41,18 +44,25 @@ export const ArtistView = () => {
       <Col>
         <Divider />
         <Row
-          style={{ margin: '0 30px', textAlign: 'left', fontSize: '1.4rem' }}
+          style={{ marginTop: 32, textAlign: 'left', fontSize: '1.4rem' }}
         >
           <Col span={24}>
-            <h2>
-              {/* <MetaAvatar creators={creator ? [creator] : []} size={100} /> */}
-              {creator?.info.name || creator?.info.address}
-            </h2>
+            <div style={{ display: 'plex', flexDirection: 'column', textAlign: 'center', marginTop: 12 }}>
+              <img style={{ width: '50px', height: '50px' }} src="https://newtelco.ge/wp-content/uploads/2020/02/img_569204.png" alt="" />
+              <h2 style={{ fontSize: '80%', textAlign: 'center', padding: 5 }}>
+                {/* <MetaAvatar creators={creator ? [creator] : []} size={100} /> */}
+                {creator?.info.name || creator?.info.address}
+              </h2>
+            </div>
             <br />
-            <div className="info-header">ABOUT THE CREATOR</div>
-            <div className="info-content">{creator?.info.description}</div>
-            <br />
-            <div className="info-header">Art Created</div>
+            {creator?.info.description == "undefined" ?
+              <>
+                <div className="info-header">Thông Tin Người Sáng Tạo</div>
+                <div className="info-content">{creator?.info.description}</div>
+                <br />
+              </>
+              : <div></div>}
+            <div className="info-header">Sản Phẩm</div>
             {artworkGrid}
           </Col>
         </Row>
