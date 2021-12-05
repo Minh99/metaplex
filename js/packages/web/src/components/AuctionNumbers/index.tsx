@@ -18,8 +18,17 @@ export const AuctionCountdown = (props: {
   labels: boolean;
 }) => {
   const { auctionView } = props;
+  // console.log(auctionView);
+  
   const state = useAuctionCountdown(auctionView);
   const ended = isEnded(state);
+  // const ended = isEnded(state);
+
+  
+  // const stop = () => {
+  //   const a =  setEndNow(1,2,3,4);
+  //   isEnded();
+  // }
 
   if (!props.labels) {
     return <Countdown state={state} />;

@@ -33,17 +33,20 @@ export const ArtView = () => {
   const art = useArt(id);
   let badge = '';
   let maxSupply = '';
+  let suppLy = '';
+
   if (art.type === ArtType.NFT) {
-    badge = 'Unique';
+    badge = 'Duy Nhất';
   } else if (art.type === ArtType.Master) {
     badge = 'NFT 0';
     if (art.maxSupply !== undefined) {
       maxSupply = art.maxSupply.toString();
     } else {
-      maxSupply = 'Unlimited';
+      maxSupply = 'Vô Hạn';
     }
   } else if (art.type === ArtType.Print) {
-    badge = `${art.edition} of ${art.supply}`;
+    badge = ` v${art.edition}`;
+    suppLy = ` ${art.supply}`;
   }
   const { ref, data } = useExtendedArt(id);
 
@@ -86,7 +89,7 @@ export const ArtView = () => {
           <Col
             xs={{ span: 24 }}
             md={{ span: 12 }}
-            style={{ paddingRight: '30px' }}
+            style={{ paddingRight: '30px'}}
           >
             <ArtContent
               style={{ width: '100%', height: 'auto', margin: '0 auto' }}
@@ -103,16 +106,16 @@ export const ArtView = () => {
           <Col
             xs={{ span: 24 }}
             md={{ span: 12 }}
-            style={{ textAlign: 'left', fontSize: '1.4rem' }}
+            style={{ textAlign: 'left', fontSize: '2rem' }}
           >
             <Row>
-              <div style={{ fontWeight: 700, fontSize: '4rem' }}>
+              <div style={{ fontWeight: 700, fontSize: '3rem' }}>
                 {art.title || <Skeleton paragraph={{ rows: 0 }} />}
               </div>
             </Row>
             <Row>
               <Col span={6}>
-                <h6>Royalties</h6>
+                <h6>Phí Bản Quyền</h6>
                 <div className="royalties">
                   {((art.seller_fee_basis_points || 0) / 100).toFixed(2)}%
                 </div>
@@ -123,7 +126,7 @@ export const ArtView = () => {
             </Row>
             <Row>
               <Col>
-                <h6 style={{ marginTop: 5 }}>Created By</h6>
+                <h6 style={{ marginTop: 5 }}>Người Chế Tạo</h6>
                 <div className="creators">
                   {(art.creators || []).map((creator, idx) => {
                     return (
@@ -174,8 +177,14 @@ export const ArtView = () => {
             </Row>
             <Row>
               <Col>
-                <h6 style={{ marginTop: 5 }}>Edition</h6>
-                <div className="art-edition">{badge}</div>
+                <div style={{ display: 'flex', justifyContent: 'flex-start', justifyItems: 'center', marginTop: 5, tabSize: 4 }}>
+                  <h6>Phiên bản (Edition):  &nbsp;</h6>
+                  <div className="art-edition">{badge}</div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'flex-start', justifyItems: 'center', marginTop: 5, tabSize: 4 }}>
+                  <h6>Tổng cung (supply):  &nbsp;</h6>
+                  <div className="art-edition">{suppLy}</div>
+                </div>
               </Col>
             </Row>
             {art.type === ArtType.Master && (

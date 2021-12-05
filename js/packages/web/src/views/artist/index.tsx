@@ -17,8 +17,6 @@ export const ArtistView = () => {
     500: 1,
   };
 
-  console.log(creator);
-  
   const artworkGrid = (
     <Masonry
       breakpointCols={breakpointColumnsObj}
@@ -57,7 +55,7 @@ export const ArtistView = () => {
             <br />
             {creator?.info.description == "undefined" ?
               <>
-                <div className="info-header">Thông Tin Người Sáng Tạo</div>
+                <div className="info-header">Thông Tin Người Chế  Tạo</div>
                 <div className="info-content">{creator?.info.description}</div>
                 <br />
               </>

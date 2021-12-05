@@ -575,7 +575,7 @@ export function Notifications() {
     return (
       <Badge
         count={notifications.length - 1}
-        style={{ backgroundColor: 'white', color: 'black' }}
+        style={{ backgroundColor: 'black', color: 'white' }}
       >
         {justContent}
       </Badge>

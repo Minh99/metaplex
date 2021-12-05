@@ -420,8 +420,8 @@ export const InnerBillingView = ({
               allowMeshRender={true}
             />
           </Col>
-          <Col span={12}>
-            <div style={{ fontWeight: 700 }}>{art.title}</div>
+          <Col span={11}  style={{ paddingLeft: '1rem' }}>
+            <div>{art.title}</div>
             <br />
             <div className="info-header">TOTAL AUCTION VALUE</div>
             <div className="escrow">
@@ -431,7 +431,6 @@ export const InnerBillingView = ({
                 mint,
               )}
             </div>
-            <br />
             <div className="info-header">TOTAL AUCTION REDEEMED VALUE</div>
             <div className="escrow">
               {auctionView.auctionManager.acceptPayment == WRAPPED_SOL_MINT.toBase58()? "◎": ""}
@@ -442,7 +441,6 @@ export const InnerBillingView = ({
                 mint,
               )}
             </div>
-            <br />
             <div className="info-header">
               TOTAL COLLECTED BY ARTISTS AND AUCTIONEER
             </div>
@@ -456,7 +454,6 @@ export const InnerBillingView = ({
                 mint,
               )}
             </div>
-            <br />
             <div className="info-header">TOTAL UNSETTLED</div>
             <div className="escrow">
               {auctionView.auctionManager.acceptPayment == WRAPPED_SOL_MINT.toBase58()? "◎": ""}
@@ -468,12 +465,10 @@ export const InnerBillingView = ({
                 mint,
               )}
             </div>
-            <br />
             <div className="info-header">TOTAL IN ESCROW</div>
             <div className="escrow">
               {escrowBalance !== undefined ? `${auctionView.auction.info.tokenMint == WRAPPED_SOL_MINT.toBase58()? "◎": ""} ${escrowBalance}` : <Spin />}
             </div>
-            <br />
             {hasParticipation && (
               <>
                 <div className="info-header">

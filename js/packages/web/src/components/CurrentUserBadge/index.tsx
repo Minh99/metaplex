@@ -59,7 +59,7 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
                   }}
                   className="black-btn"
                 >
-                  Create
+                  Tạo sản phẩm
                 </Button>
               </Link>
             )}
@@ -70,7 +70,7 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
                 }}
                 className="black-btn"
               >
-                Sell
+                Bán sản phẩm
               </Button>
             </Link>
           </div>
@@ -78,21 +78,22 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
           <div
             style={{
               display: 'flex',
+              flexDirection: 'column',
+              textAlign: 'center',
             }}
           >
             {canCreate && (
               <>
                 <Link to={`/art/create`} style={{ width: '100%' }}>
                   <Button className="metaplex-button-default" style={btnStyle}>
-                    Create
+                    Tạo sản phẩm
                   </Button>
                 </Link>
-                &nbsp;&nbsp;
               </>
             )}
             <Link to={`/auction/create/0`} style={{ width: '100%' }}>
               <Button className="metaplex-button-default" style={btnStyle}>
-                Sell
+                Bán sản phẩm
               </Button>
             </Link>
           </div>
@@ -297,26 +298,26 @@ export const CurrentUserBadge = (props: {
                 <div
                   style={{
                     display: 'flex',
+                    flexDirection: 'column',
                     marginBottom: 10,
                   }}
                 >
+                  <UserActions />
                   <Button
                     className="metaplex-button-default"
                     onClick={() => setShowAddFundsModal(true)}
                     style={btnStyleHide}
                   >
-                    Add Funds
+                    Nhận Sol thử nghiệm
                   </Button>
-                  &nbsp;&nbsp;
                   <Button
                     className="metaplex-button-default"
                     onClick={disconnect}
                     style={btnStyle}
                   >
-                    Disconnect
+                    Ngắt kết nối ví
                   </Button>
                 </div>
-                <UserActions />
               </div>
             }
           />
@@ -500,6 +501,14 @@ export const CurrentUserBadgeMobile = (props: {
         </span>
       </div>
       <div className="actions-buttons">
+        <UserActions
+          mobile
+          onClick={() => {
+            props.closeModal ? props.closeModal() : null;
+          }}
+        />
+      </div>
+      <div className="actions-buttons">
         <Button
           className="secondary-btn"
           onClick={() => {
@@ -507,20 +516,11 @@ export const CurrentUserBadgeMobile = (props: {
             setShowAddFundsModal(true);
           }}
         >
-          Add Funds
+          Nhận Sol thử nghiệm
         </Button>
-        &nbsp;&nbsp;
         <Button className="black-btn" onClick={disconnect}>
-          Disconnect
+          Ngắt kết nối ví
         </Button>
-      </div>
-      <div className="actions-buttons">
-        <UserActions
-          mobile
-          onClick={() => {
-            props.closeModal ? props.closeModal() : null;
-          }}
-        />
       </div>
       <AddFundsModal
         setShowAddFundsModal={setShowAddFundsModal}

@@ -22,7 +22,7 @@ const getDefaultLinkActions = (connected: boolean) => {
       <Button className="app-btn">{connected ? 'Sản Phẩm Của Tôi' : 'Sản Phẩm'}</Button>
     </Link>,
     <Link to={`/artists`} key={'artists'}>
-      <Button className="app-btn">Người Sáng Tạo</Button>
+      <Button className="app-btn">Người Chế  Tạo</Button>
     </Link>,
   ];
 };
@@ -75,10 +75,10 @@ const MetaplexMenu = () => {
                     onClick={() => setIsModalVisible(false)}
                     className="secondary-btn"
                   />
-                  <HowToBuyModal
+                  {/* <HowToBuyModal
                     onClick={() => setIsModalVisible(false)}
                     buttonClassName="black-btn"
-                  />
+                  /> */}
                 </div>
               ) : (
                 <>
@@ -130,9 +130,9 @@ export const AppBar = () => {
           <MetaplexMenu />
         </div>
         <div className="app-right">
-          {!connected && (
+          {/* {!connected && (
             <HowToBuyModal buttonClassName="modal-button-default" />
-          )}
+          )} */}
           {!connected && (
             <ConnectButton style={{ height: 48 }} allowWalletChange />
           )}

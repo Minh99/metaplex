@@ -263,6 +263,16 @@ export class AuctionData {
     return { days, hours, minutes, seconds };
   }
 
+  public setEndNow(): CountdownState {
+    const now = moment().unix();
+    const days = Math.floor(now / 86400);
+    const hours = Math.floor(now / 86400);
+    const minutes = Math.floor(now / 86400);
+    const seconds = Math.floor(now / 86400);
+
+    return { days, hours, minutes, seconds };
+  }
+
   public ended() {
     const now = moment().unix();
     if (!this.endedAt) return false;
