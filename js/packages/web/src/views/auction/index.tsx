@@ -274,7 +274,7 @@ export const AuctionView = () => {
     );
   } else {
     return (
-      <Row justify="center" ref={ref} gutter={[48, 0]}>
+      <Row justify="center" ref={ref} gutter={[48, 0]} style={{fontSize: '1.4rem'}} >
         <Col span={24} md={10} className={'img-cont-500'}>
           <div className="auction-view" style={{ minHeight: 300 }}>
             <Carousel
@@ -461,6 +461,8 @@ const BidLine = (props: {
     getTwitterHandle(connection, bidder);
   }, [bidderTwitterHandle]);
   const { width } = useWindowDimensions();
+  // console.log(format(bid.info.lastBidTimestamp.toNumber() * 1000));
+  
   if (width < 768) {
     return (
       <Row className="mobile-bid-history">
@@ -645,11 +647,12 @@ export const AuctionBids = ({
   }, [auctionState, bids, activeBidders]);
 
   if (!auctionView || bids.length < 1) return null;
-
+  // console.log(bidLines);
+  
   return (
     <Row>
       <Col className="bids-lists">
-        <h6 className={'info-title'}>Bid History</h6>
+        <h6 className={'info-title'}>Lịch sử đấu giá</h6>
         {bidLines.slice(0, 10)}
         {bids.length > 10 && (
           <div
@@ -659,13 +662,13 @@ export const AuctionBids = ({
               cursor: 'pointer',
             }}
           >
-            View full history
+            Hiển thị toàn bộ lịch sử đấu giá
           </div>
         )}
         <MetaplexModal
           visible={showHistoryModal}
           onCancel={() => setShowHistoryModal(false)}
-          title="Bid history"
+          title="Lịch sử đấu giá"
           bodyStyle={{
             background: 'unset',
             boxShadow: 'unset',

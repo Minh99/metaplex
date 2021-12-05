@@ -407,6 +407,9 @@ export const InnerBillingView = ({
   } = useBillingInfo({
     auctionView,
   });
+
+  console.log(auctionView.auctionManager);
+  
   return (
     <Content>
       <Col>
@@ -423,7 +426,7 @@ export const InnerBillingView = ({
           <Col span={11}  style={{ paddingLeft: '1rem' }}>
             <div>{art.title}</div>
             <br />
-            <div className="info-header">TOTAL AUCTION VALUE</div>
+            <div className="info-header">Tổng giá trị đấu giá</div>
             <div className="escrow">
               {auctionView.auctionManager.acceptPayment == WRAPPED_SOL_MINT.toBase58()? "◎": ""}
               {fromLamports(
@@ -431,7 +434,7 @@ export const InnerBillingView = ({
                 mint,
               )}
             </div>
-            <div className="info-header">TOTAL AUCTION REDEEMED VALUE</div>
+            {/* <div className="info-header">TOTAL AUCTION REDEEMED VALUE</div>
             <div className="escrow">
               {auctionView.auctionManager.acceptPayment == WRAPPED_SOL_MINT.toBase58()? "◎": ""}
               {fromLamports(
@@ -440,9 +443,9 @@ export const InnerBillingView = ({
                   participationUnredeemedTotal,
                 mint,
               )}
-            </div>
+            </div> */}
             <div className="info-header">
-              TOTAL COLLECTED BY ARTISTS AND AUCTIONEER
+              Số  Sol người chế tạo nhận được
             </div>
             <div className="escrow">
               {auctionView.auctionManager.acceptPayment == WRAPPED_SOL_MINT.toBase58()? "◎": ""}
@@ -454,7 +457,7 @@ export const InnerBillingView = ({
                 mint,
               )}
             </div>
-            <div className="info-header">TOTAL UNSETTLED</div>
+            {/* <div className="info-header">TOTAL UNSETTLED</div>
             <div className="escrow">
               {auctionView.auctionManager.acceptPayment == WRAPPED_SOL_MINT.toBase58()? "◎": ""}
               {fromLamports(
@@ -464,15 +467,15 @@ export const InnerBillingView = ({
                 ),
                 mint,
               )}
-            </div>
-            <div className="info-header">TOTAL IN ESCROW</div>
+            </div> */}
+            <div className="info-header">Số Sol chưa hoàn trả người thua cuộc</div>
             <div className="escrow">
               {escrowBalance !== undefined ? `${auctionView.auction.info.tokenMint == WRAPPED_SOL_MINT.toBase58()? "◎": ""} ${escrowBalance}` : <Spin />}
             </div>
             {hasParticipation && (
               <>
                 <div className="info-header">
-                  TOTAL UNREDEEMED PARTICIPATION FEES OUTSTANDING
+                  Tổng phí tham gia thu được
                 </div>
                 <div className="outstanding-open-editions">
                 {auctionView.auctionManager.acceptPayment == WRAPPED_SOL_MINT.toBase58()? "◎": ""}{fromLamports(participationUnredeemedTotal, mint)}
@@ -485,6 +488,7 @@ export const InnerBillingView = ({
               type="primary"
               size="large"
               className="action-btn"
+              disabled={auctionView.auctionManager.authority !== wallet.publicKey?.toBase58()}
               onClick={async () => {
                 await settle(
                   connection,
@@ -497,12 +501,14 @@ export const InnerBillingView = ({
                 setEscrowBalanceRefreshCounter(ctr => ctr + 1);
               }}
             >
-              SETTLE OUTSTANDING
+              Rút tiền về ví
             </Button>
           </Col>
         </Row>
-        <Row>
+        <Row style={{display: 'none'}}>
+          <h4>Danh sách người cổ phần</h4>
           <Table
+            className={"table-biling"}
             style={{ width: '100%' }}
             columns={[
               {

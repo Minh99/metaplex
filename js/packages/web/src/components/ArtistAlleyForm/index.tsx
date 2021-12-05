@@ -58,7 +58,7 @@ export const ArtistAlleyForm = () => {
             >
               <p className="ant-upload-text">Upload files here</p>
               <p className="ant-upload-hint">
-                Drag and drop, or click to browse
+                Kéo và thả vào khung, hoặc nhấp vào đây
               </p>
             </Upload.Dragger>
           </Form.Item>

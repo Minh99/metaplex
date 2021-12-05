@@ -12,22 +12,22 @@ export const HowAuctionsWorkModal: React.FC<HowAuctionsWorkModalProps> = ({
   return (
     <InstructionsModal
       buttonClassName={buttonClassName}
-      buttonText="How Auctions Work"
-      modalTitle="How Auctions Work"
+      buttonText="Cách đấu giá hoạt động"
+      modalTitle="Cách đấu giá hoạt động"
       cardProps={[
         {
-          title: 'Placing a Bid',
-          description: `Once you find an NFT you’d like to own, place a bid on the auction page. Keep in mind the amount of SOL you bid will be locked in your wallet for the remainder of the auction.`,
+          title: 'Đặt giá thầu',
+          description: `Khi bạn tìm thấy NFT bạn muốn sở hữu, hãy đặt giá thầu trên trang của phiên đấu giá đó. Số  Sol mà bạn đấu giá sẽ được lưu lại trong phiên đấu giá. Nếu bạn thắng số  Sol đó sẽ mất và bạn được NFT, ngược lại nếu bạn thua cuộc bạn sẽ mất phí tham gia đấu giá và được hoàn lại số  Sol đã tham gia trong phiên đấu giá đó.`,
           imgSrc: '/modals/how-auctions-work-1.jpg',
         },
         {
-          title: 'Winning an Auction',
-          description: `Keep an eye on the auctions page (and your notifications) to know when you’ve been outbid, and how the sale is progressing.`,
+          title: 'Thắng một phiên đấu giá',
+          description: `Hãy theo dõi xem phiên đấu giá đó diễn ra như thế nào, để nắm bắt nhanh tình hình xem có ai trả giá cao hơn mình không.`,
           imgSrc: '/modals/how-auctions-work-2.jpg',
         },
         {
-          title: 'Redeeming your NFT',
-          description: `If you’re lucky enough to win your NFT auction, you’ll have to redeem it to add it to your wallet. This can be done from the auction, winning notification, or your profile on ${LABELS.STORE_NAME}.`,
+          title: 'Đổi NFT',
+          description: `Nếu bạn may mắn trở thành người chiến thắng trong phiên đấu giá, bạn sẽ phải đối NFT đó với số tiền mà bạn đã đấu giá, sản phẩm (NFT) sẽ được ủy quyền hoàn toàn cho bạn.`,
           imgSrc: '/modals/how-auctions-work-3.jpg',
         },
       ]}

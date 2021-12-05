@@ -81,14 +81,14 @@ export const ArtworksView = () => {
               onTabClick={key => setActiveKey(key as ArtworkViewState)}
             >
               <TabPane
-                tab={<span className="tab-title">All</span>}
+                tab={<span className="tab-title">Tất cả</span>}
                 key={ArtworkViewState.Metaplex}
               >
                 {artworkGrid}
               </TabPane>
               {connected && (
                 <TabPane
-                  tab={<span className="tab-title">Owned</span>}
+                  tab={<span className="tab-title">Đang sở hữu</span>}
                   key={ArtworkViewState.Owned}
                 >
                   {artworkGrid}
@@ -96,7 +96,7 @@ export const ArtworksView = () => {
               )}
               {connected && (
                 <TabPane
-                  tab={<span className="tab-title">Created</span>}
+                  tab={<span className="tab-title">Đã chế  tạo</span>}
                   key={ArtworkViewState.Created}
                 >
                   {artworkGrid}

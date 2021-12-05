@@ -242,11 +242,11 @@ export const AuctionCard = ({
   const symbol = tokenInfo
     ? tokenInfo.symbol
     : mintKey == WRAPPED_SOL_MINT.toBase58()
-    ? 'SOL'
-    : 'CUSTOM';
+      ? 'SOL'
+      : 'CUSTOM';
 
 
-  const LAMPORTS_PER_MINT = tokenInfo? Math.ceil(10 ** tokenInfo.decimals): LAMPORTS_PER_SOL;
+  const LAMPORTS_PER_MINT = tokenInfo ? Math.ceil(10 ** tokenInfo.decimals) : LAMPORTS_PER_SOL;
 
 
   //console.log("[--P]AuctionCard", tokenInfo, mintKey)
@@ -301,13 +301,13 @@ export const AuctionCard = ({
     tickSize &&
     (isUpcoming || bids.length === 0
       ? fromLamports(
-          participationOnly ? participationFixedPrice : priceFloor,
-          mintInfo,
-        )
+        participationOnly ? participationFixedPrice : priceFloor,
+        mintInfo,
+      )
       : isStarted && bids.length > 0
-      ? parseFloat(formatTokenAmount(bids[0].info.lastBid, mintInfo))
-      : 9999999) +
-      tickSize.toNumber() / LAMPORTS_PER_MINT;
+        ? parseFloat(formatTokenAmount(bids[0].info.lastBid, mintInfo))
+        : 9999999) +
+    tickSize.toNumber() / LAMPORTS_PER_MINT;
 
   const invalidBid =
     tickSizeInvalid ||
@@ -481,17 +481,42 @@ export const AuctionCard = ({
   if (shouldHide) {
     return <></>;
   }
+  console.log(auctionView.auction.info);
 
   return (
     <div className="auction-container" style={style}>
       <div className={'time-info'}>
-        {!auctionView.isInstantSale && (
+        {(!auctionView.isInstantSale && !auctionView.auction.info.ended()) && (
           <>
-            <span>Auction ends in</span>
+            <span>Thời gian còn lại </span>
             <div>
               <AuctionCountdown auctionView={auctionView} labels={false} />
             </div>
           </>
+        )}
+        {(auctionView.auction.info.ended()) && (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <h2>Phiên đấu giá đã kết thúc</h2>
+            <span>
+              {
+                eligibleForAnything ? (
+                  "Chúc mừng bạn đã thắng phiên đấu giá này."
+                ) : (
+                  `${wallet?.publicKey &&
+                    auctionView.auctionManager.authority !==
+                    wallet.publicKey.toBase58()
+                    ? "Thật tiếc! bạn đã thua trong phiên đấu giá này."
+                    : ""
+                  }`
+                )
+              }
+            </span>
+            {wallet?.publicKey &&
+              auctionView.auctionManager.authority ===
+              wallet.publicKey.toBase58() &&
+              (<Link to={`/auction/${auctionView.auction.pubkey}/billing`}>Xem thông tin.</Link>)
+            }
+          </div>
         )}
       </div>
       <div className={'bid-info'}>
@@ -564,87 +589,88 @@ export const AuctionCard = ({
                 }}
               >
                 {loading ||
-                auctionView.items.find(i => i.find(it => !it.metadata)) ||
-                !myPayingAccount ? (
+                  auctionView.items.find(i => i.find(it => !it.metadata)) ||
+                  !myPayingAccount ? (
                   <Spin />
                 ) : eligibleForAnything ? (
-                  `Redeem bid`
+                  `Nhận sản phẩm`
                 ) : (
-                  `${
-                    wallet?.publicKey &&
-                    auctionView.auctionManager.authority ===
-                      wallet.publicKey.toBase58()
-                      ? 'Reclaim Items'
-                      : 'Refund bid'
+                  `${wallet?.publicKey &&
+                    auctionView.auctionManager.authority !==
+                    wallet.publicKey.toBase58()
+                    ? 'Nhận lại Sol'
+                    : ''
                   }`
                 )}
               </Button>
             )}
-          {showPlaceBid ? (
-            <div className="show-place-bid">
-              <AmountLabel
-                title="in your wallet"
-                displaySymbol={tokenInfo?.symbol || 'CUSTOM'}
-                style={{ marginBottom: 0 }}
-                amount={balance.balance}
-                tokenInfo={tokenInfo}
-                customPrefix={
-                  <Identicon
-                    address={wallet?.publicKey?.toBase58()}
-                    style={{ width: 36 }}
-                  />
-                }
-              />
-            </div>
-          ) : (
-            <div className="actions-place-bid">
-              <HowAuctionsWorkModal buttonClassName="black-btn" />
-              {!hideDefaultAction &&
-                !auctionView.auction.info.ended() &&
-                (wallet.connected &&
-                isAuctionNotStarted &&
-                !isAuctionManagerAuthorityNotWalletOwner ? (
-                  <Button
-                    className="secondary-btn"
-                    disabled={loading}
-                    onClick={async () => {
-                      setLoading(true);
-                      try {
-                        await startAuctionManually(
-                          connection,
-                          wallet,
-                          auctionView,
-                        );
-                      } catch (e) {
-                        console.error(e);
-                      }
-                      setLoading(false);
-                    }}
-                    style={{ marginTop: 20 }}
-                  >
-                    {loading ? <Spin /> : 'Start auction'}
-                  </Button>
-                ) : (
-                  !showPlaceBid && (
+          {showPlaceBid ?
+            (
+              <div className="show-place-bid">
+                <AmountLabel
+                  title="Số Sol hiện tại"
+                  displaySymbol={tokenInfo?.symbol || 'CUSTOM'}
+                  style={{ marginBottom: 0 }}
+                  amount={balance.balance}
+                  tokenInfo={tokenInfo}
+                  customPrefix={
+                    <Identicon
+                      address={wallet?.publicKey?.toBase58()}
+                      style={{ width: 36 }}
+                    />
+                  }
+                />
+              </div>
+            ) : (
+              <div className="actions-place-bid">
+                <HowAuctionsWorkModal buttonClassName="black-btn" />
+                {!hideDefaultAction &&
+                  !auctionView.auction.info.ended() &&
+                  (wallet.connected &&
+                    isAuctionNotStarted &&
+                    !isAuctionManagerAuthorityNotWalletOwner ? (
                     <Button
                       className="secondary-btn"
-                      onClick={() => {
-                        if (wallet.connected) setShowPlaceBid(true);
-                        else connect();
+                      disabled={loading}
+                      onClick={async () => {
+                        setLoading(true);
+                        try {
+                          await startAuctionManually(
+                            connection,
+                            wallet,
+                            auctionView,
+                          );
+                        } catch (e) {
+                          console.error(e);
+                        }
+                        setLoading(false);
                       }}
+                      style={{ marginTop: 20 }}
                     >
-                      Place Bid
+                      {loading ? <Spin /> : 'Start auction'}
                     </Button>
-                  )
-                ))}
-            </div>
-          )}
+                  ) : (
+                    !showPlaceBid && (
+                      <Button
+                        className="secondary-btn"
+                        onClick={() => {
+                          if (wallet.connected) setShowPlaceBid(true);
+                          else connect();
+                        }}
+                      >
+                        Place Bid
+                      </Button>
+                    )
+                  ))}
+              </div>
+            )}
         </div>
         {showPlaceBid &&
           !auctionView.isInstantSale &&
           !hideDefaultAction &&
           wallet.connected &&
-          !auctionView.auction.info.ended() && (
+          !auctionView.auction.info.ended() &&
+          auctionView.auctionManager.authority !== wallet.publicKey?.toBase58() && (
             <div
               style={{
                 display: 'flex',
@@ -882,7 +908,7 @@ export const AuctionCard = ({
             marginBottom: 20,
           }}
         >
-          Congratulations
+          Xin chúc mừng!
         </h1>
         <p
           style={{
@@ -891,8 +917,8 @@ export const AuctionCard = ({
             fontSize: '2rem',
           }}
         >
-          Your {auctionView.isInstantSale ? 'purchase' : 'bid'} has been
-          redeemed please view your NFTs in <Link to="/artworks">My Items</Link>
+          {/* Your {auctionView.isInstantSale ? 'purchase' : 'bid'} has been */}
+          Bạn đã đổi sản phẩm (NFT) thành công <Link to="/artworks">xem</Link>
           .
         </p>
         <Button
@@ -919,6 +945,6 @@ export const AuctionCard = ({
           to redeem their bids for them right now.
         </h3>
       </MetaplexModal>
-    </div>
+    </div >
   );
 };

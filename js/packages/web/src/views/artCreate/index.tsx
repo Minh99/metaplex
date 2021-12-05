@@ -154,11 +154,11 @@ export const ArtCreateView = () => {
                 maxWidth: '100%',
               }}
             >
-              <Step title="Category" />
-              <Step title="Upload" />
-              <Step title="Info" />
-              <Step title="Royalties" />
-              <Step title="Launch" />
+              <Step title="Danh mục" />
+              <Step title="Hình ảnh" />
+              <Step title="Thông tin sản phẩm" />
+              <Step title="Tính sở hữu" />
+              <Step title="Hoàn tất" />
             </Steps>
           </Col>
         )}
@@ -220,7 +220,7 @@ export const ArtCreateView = () => {
           )}
           {0 < step && step < 5 && (
             <div style={{ margin: 'auto', width: 'fit-content' }}>
-              <Button onClick={() => gotoStep(step - 1)}>Back</Button>
+              <Button onClick={() => gotoStep(step - 1)}>Trở lại</Button>
             </div>
           )}
         </Col>
@@ -239,7 +239,7 @@ const CategoryStep = (props: {
   return (
     <>
       <Row className="call-to-action">
-        <h2>Create a new item</h2>
+        <h2>Tạo mới một sản phẩm</h2>
       </Row>
       <Row justify={width < 768 ? 'center' : 'start'}>
         <Col>
@@ -250,7 +250,7 @@ const CategoryStep = (props: {
               onClick={() => props.confirm(MetadataCategory.Image)}
             >
               <div>
-                <div>Image</div>
+                <div>Hình ảnh</div>
                 <div className="type-btn-description">JPG, PNG, GIF</div>
               </div>
             </Button>
@@ -375,16 +375,12 @@ const UploadStep = (props: {
   return (
     <>
       <Row className="call-to-action">
-        <h2>Upload your item's image</h2>
-        <p style={{ fontSize: '1.2rem' }}>
-          Depending on file type, can take up to 1 minute.
-        </p>
+        <h2>Chọn hình ảnh cho sản phẩm</h2>
       </Row>
       <Row className="content-action" >
-        <h3>Upload a cover image (PNG, JPG, GIF, SVG)</h3>
         <Dragger
           accept=".png,.jpg,.gif,.mp4,.svg"
-          style={{ padding: 20, background: 'rgba(255, 255, 255, 0.08)'}}
+          style={{ padding: 20, background: 'rgba(255, 255, 255, 0.08)' }}
           multiple={false}
           customRequest={info => {
             // dont upload files here, handled outside of the control
@@ -412,7 +408,7 @@ const UploadStep = (props: {
             setCoverArtError(undefined);
           }}
         >
-          <div style={{display:'none'}} className="ant-upload-drag-icon">
+          <div style={{ display: 'none' }} className="ant-upload-drag-icon">
             <h3 style={{ fontWeight: 700 }}>
               Upload your cover image (PNG, JPG, GIF, SVG)
             </h3>
@@ -421,7 +417,7 @@ const UploadStep = (props: {
             <Text type="danger">{coverArtError}</Text>
           ) : (
             <p className="ant-upload-text" style={{ color: '#6d6d6d' }}>
-              Drag and drop, or click to browse
+              Kéo và thả vào khung, hoặc nhấp vào đây
             </p>
           )}
         </Dragger>
@@ -458,7 +454,7 @@ const UploadStep = (props: {
               <h3 style={{ fontWeight: 700 }}>Upload your creation</h3>
             </div>
             <p className="ant-upload-text" style={{ color: '#6d6d6d' }}>
-              Drag and drop, or click to browse
+              Kéo và thả vào khung, hoặc nhấp vào đây
             </p>
           </Dragger>
         </Row>
@@ -543,7 +539,7 @@ const UploadStep = (props: {
           style={{ marginTop: 24 }}
           className="action-btn"
         >
-          Continue to Mint
+          Tiếp tục
         </Button>
       </Row>
     </>
@@ -606,6 +602,8 @@ const InfoStep = (props: {
 }) => {
   const [creators, setCreators] = useState<Array<UserValue>>([]);
   const [royalties, setRoyalties] = useState<Array<Royalty>>([]);
+  const [isNext, setisNext] = useState<boolean>(false);
+
   const { image, animation_url } = useArtworkFiles(
     props.files,
     props.attributes,
@@ -619,14 +617,23 @@ const InfoStep = (props: {
         amount: Math.trunc(100 / creators.length),
       })),
     );
-  }, [creators]);
+    if (props.attributes.name.length > 50
+      || props.attributes.name.length == 0
+      || props.attributes.symbol.length == 0
+      || props.attributes.symbol.length > 10
+      || props.attributes.description.length > 500
+
+    ) {
+      setisNext(false);
+    }
+    else {
+      setisNext(true);
+    }
+  }, [creators, props.attributes.name, props.attributes.symbol]);
   return (
     <>
       <Row className="call-to-action">
-        <h2>Describe your item</h2>
-        <p>
-          Provide detailed description of your Item
-        </p>
+        <h2>Thông tin sản phẩm</h2>
       </Row>
       <Row className="content-action" justify="space-around">
         <Col>
@@ -643,14 +650,15 @@ const InfoStep = (props: {
         </Col>
         <Col className="section" style={{ minWidth: 300 }}>
           <label className="action-field">
-            <span className="field-title">Title</span>
+            <span className="field-title">Tên sản phẩm</span>
             <Input
               autoFocus
               className="input"
-              placeholder="Max 50 characters"
+              placeholder="Tối đa 50 ký tự"
               allowClear
               value={props.attributes.name}
               onChange={info =>
+
                 props.setAttributes({
                   ...props.attributes,
                   name: info.target.value,
@@ -658,11 +666,11 @@ const InfoStep = (props: {
               }
             />
           </label>
-          {/* <label className="action-field">
-            <span className="field-title">Symbol</span>
+          <label className="action-field">
+            <span className="field-title">Ký hiệu</span>
             <Input
               className="input"
-              placeholder="Max 10 characters"
+              placeholder="Tối đa 10 ký tự"
               allowClear
               value={props.attributes.symbol}
               onChange={info =>
@@ -672,13 +680,13 @@ const InfoStep = (props: {
                 })
               }
             />
-          </label> */}
+          </label>
 
           <label className="action-field">
-            <span className="field-title">Description</span>
+            <span className="field-title">Mô tả chi tiết</span>
             <Input.TextArea
               className="input textarea"
-              placeholder="Max 500 characters"
+              placeholder="Tối đa 500 ký tự"
               value={props.attributes.description}
               onChange={info =>
                 props.setAttributes({
@@ -690,9 +698,9 @@ const InfoStep = (props: {
             />
           </label>
           <label className="action-field">
-            <span className="field-title">Maximum Supply</span>
+            <span className="field-title">Số lượng</span>
             <InputNumber
-              placeholder="Quantity"
+              placeholder="Số lượng"
               onChange={(val: number) => {
                 props.setAttributes({
                   ...props.attributes,
@@ -705,10 +713,10 @@ const InfoStep = (props: {
               className="royalties-input"
             />
           </label>
-          <label className="action-field"  style={{display: 'none'}}>
-            <span className="field-title">Attributes</span>
-          </label>
-          <Form name="dynamic_attributes" form={form} autoComplete="off"  style={{display: 'none'}}>
+          {/* <label className="action-field">
+            <span className="field-title">Thuộc tính</span>
+          </label> */}
+          {/* <Form name="dynamic_attributes" form={form} autoComplete="off" style={{display: 'none'}}>
             <Form.List name="attributes">
               {(fields, { add, remove }) => (
                 <>
@@ -752,7 +760,7 @@ const InfoStep = (props: {
                 </>
               )}
             </Form.List>
-          </Form>
+          </Form> */}
         </Col>
       </Row>
 
@@ -760,6 +768,7 @@ const InfoStep = (props: {
         <Button
           type="primary"
           size="large"
+          disabled={!isNext}
           onClick={() => {
             form.validateFields().then(values => {
               const nftAttributes = values.attributes;
@@ -781,7 +790,7 @@ const InfoStep = (props: {
           }}
           className="action-btn"
         >
-          Continue to royalties
+          Tiếp tục
         </Button>
       </Row>
     </>
@@ -907,28 +916,20 @@ const RoyaltiesStep = (props: {
   return (
     <>
       <Row className="call-to-action" style={{ marginBottom: 20 }}>
-        <h2>Set royalties and creator splits</h2>
-        <p>
-          Royalties ensure that you continue to get compensated for your work
-          after its initial sale.
-        </p>
+        <h2>Tính sở hữu</h2>
       </Row>
-      <Row className="content-action" style={{ marginBottom: 20 }}>
+      <Row className="content-action" style={{ marginBottom: 20, display: 'none' }}>
         <label className="action-field">
-          <span className="field-title">Royalty Percentage</span>
-          <p>
-            This is how much of each secondary sale will be paid out to the
-            creators.
-          </p>
+          <span className="field-title">Tiền bản quyền sản phẩm</span>
+          <span className="field-info">Tính bằng phần trăm (%) tổng số tiền bán được lần đầu tiên</span>
           <InputNumber
             autoFocus
             min={0}
             max={100}
-            placeholder="Between 0 and 100"
             onChange={(val: number) => {
               props.setAttributes({
                 ...props.attributes,
-                seller_fee_basis_points: val * 100,
+                seller_fee_basis_points: 1 * 100,
               });
             }}
             className="royalties-input"
@@ -938,21 +939,21 @@ const RoyaltiesStep = (props: {
       {[...fixedCreators, ...creators].length > 0 && (
         <Row>
           <label className="action-field" style={{ width: '100%' }}>
-            <span className="field-title">Creators Split</span>
-            <p>
-              This is how much of the proceeds from the initial sale and any
-              royalties will be split out amongst the creators.
-            </p>
-            <RoyaltiesSplitter
+            <span className="field-title">
+              - Chi phí bản quyền sẽ được chuyển toàn bộ cho người chế tạo sản phẩm ở lần bán đầu tiên.<br />
+              - Sau khi bán thành công sản phẩm này sẽ thuộc quyền sở hữu của người mua.<br />
+              - Người mua lại được sản phẩm này sẽ nắm quyền sở hữu của sản phẩm và nếu tiếp tục đem đi <br /> bán tiếp cũng không mất bất kỳ chi phí bản quyền nào từ người bán trước đó.
+            </span>
+            {/* <RoyaltiesSplitter
               creators={[...fixedCreators, ...creators]}
               royalties={royalties}
               setRoyalties={setRoyalties}
               isShowErrors={isShowErrors}
-            />
+            /> */}
           </label>
         </Row>
       )}
-      <Row>
+      {/* <Row style={{display:'none'}}>
         <span
           onClick={() => setShowCreatorsModal(true)}
           style={{ padding: 10, marginBottom: 10 }}
@@ -989,20 +990,21 @@ const RoyaltiesStep = (props: {
             <UserSearch setCreators={setCreators} />
           </label>
         </MetaplexModal>
-      </Row>
-      {isShowErrors && totalRoyaltyShares !== 100 && (
+      </Row> */}
+      {/* {isShowErrors && totalRoyaltyShares !== 100 && (
         <Row>
           <Text type="danger" style={{ paddingBottom: 14 }}>
             The split percentages for each creator must add up to 100%. Current
             total split percentage is {totalRoyaltyShares}%.
           </Text>
         </Row>
-      )}
+      )} */}
       <Row>
         <Button
           type="primary"
           size="large"
           onClick={() => {
+
             // Find all royalties that are invalid (0)
             const zeroedRoyalties = royalties.filter(
               royalty => royalty.amount === 0,
@@ -1038,12 +1040,13 @@ const RoyaltiesStep = (props: {
             props.setAttributes({
               ...props.attributes,
               creators: creatorStructs,
+              seller_fee_basis_points: 100,
             });
             props.confirm();
           }}
           className="action-btn"
         >
-          Continue to review
+          Tiếp tục
         </Button>
       </Row>
     </>
@@ -1090,14 +1093,12 @@ const LaunchStep = (props: {
         setCost(sol + additionalSol);
       });
   }, [files, metadata, setCost]);
+  console.log(props.attributes);
 
   return (
     <>
       <Row className="call-to-action">
-        <h2>Launch your creation</h2>
-        <p>
-          Provide detailed description of your item
-        </p>
+        <h2>Xác thực</h2>
       </Row>
       <Row className="content-action" justify="space-around">
         <Col>
@@ -1115,14 +1116,14 @@ const LaunchStep = (props: {
         <Col className="section" style={{ minWidth: 300 }}>
           <Statistic
             className="create-statistic"
-            title="Royalty Percentage"
-            value={props.attributes.seller_fee_basis_points / 100}
+            title="Phí bản quyền nhận được"
+            value={props.attributes.seller_fee_basis_points}
             precision={2}
             suffix="%"
           />
           {cost ? (
             <AmountLabel
-              title="Cost to Create"
+              title="Phí tạo sản phẩm"
               amount={cost.toFixed(5)}
               tokenInfo={useTokenList().tokenMap.get(
                 WRAPPED_SOL_MINT.toString(),
@@ -1134,22 +1135,47 @@ const LaunchStep = (props: {
         </Col>
       </Row>
       <Row>
+        <div style={{ display: 'flex', flexDirection: 'column' }} >
+          {props.attributes.name &&
+            <Statistic
+              className="create-statistic"
+              title="Tên sản phẩm"
+              value={props.attributes.name}
+            />
+          }
+          {props.attributes.symbol &&
+            <Statistic
+              className="create-statistic"
+              title="Ký hiệu"
+              value={props.attributes.symbol}
+            />
+          }
+          {props.attributes.description &&
+            <Statistic
+              className="create-statistic"
+              title="Mô tả sản phẩm"
+              value={props.attributes.description}
+            />
+          }
+        </div>
+      </Row>
+      <Row>
         <Button
           type="primary"
           size="large"
           onClick={props.confirm}
           className="action-btn"
         >
-          Pay with SOL
+          Hoàn tất
         </Button>
-        <Button
+        {/* <Button
           disabled={true}
           size="large"
           onClick={props.confirm}
           className="action-btn"
         >
           Pay with Credit Card
-        </Button>
+        </Button> */}
       </Row>
     </>
   );
@@ -1189,17 +1215,20 @@ const WaitingStep = (props: {
       <Card>
         <Steps direction="vertical" current={props.step}>
           <Step
+            style={{ display:'none' }}
             className={'white-description'}
             title="Minting"
             description="Starting Mint Process"
             icon={setIconForStep(props.step, 0)}
           />
           <Step
+            style={{ display:'none' }}
             className={'white-description'}
             title="Preparing Assets"
             icon={setIconForStep(props.step, 1)}
           />
           <Step
+            style={{ display:'none' }}
             className={'white-description'}
             title="Signing Metadata Transaction"
             description="Approve the transaction from your wallet"
@@ -1207,34 +1236,38 @@ const WaitingStep = (props: {
           />
           <Step
             className={'white-description'}
-            title="Sending Transaction to Solana"
-            description="This will take a few seconds."
+            title="Khởi tạo sản phẩm"
+            description="Gửi dữ liệu meta lên Solana"
             icon={setIconForStep(props.step, 3)}
           />
           <Step
+            style={{ display:'none' }}
             className={'white-description'}
             title="Waiting for Initial Confirmation"
             icon={setIconForStep(props.step, 4)}
           />
           <Step
+            style={{ display:'none' }}
             className={'white-description'}
             title="Waiting for Final Confirmation"
             icon={setIconForStep(props.step, 5)}
           />
           <Step
+            style={{ display:'none' }}
             className={'white-description'}
             title="Uploading to Arweave"
             icon={setIconForStep(props.step, 6)}
           />
           <Step
+            style={{ display:'none' }}
             className={'white-description'}
             title="Updating Metadata"
             icon={setIconForStep(props.step, 7)}
           />
           <Step
             className={'white-description'}
-            title="Signing Token Transaction"
-            description="Approve the final transaction from your wallet"
+            title="Khởi tạo các giao dịch thanh toán"
+            description="Phê duyệt giao dịch cuối cùng từ ví của bạn"
             icon={setIconForStep(props.step, 8)}
           />
         </Steps>
@@ -1279,31 +1312,30 @@ const Congrats = (props: {
 
   return (
     <>
-      <div className="waiting-title">Congratulations, you created an NFT!</div>
+      <div className="waiting-title">Bạn vừa tạo thành công một sản phẩm (NFT)</div>
       <div className="congrats-button-container">
-        <Button
+        {/* <Button
           className="metaplex-button"
           onClick={_ => window.open(newTweetURL(), '_blank')}
-          style={{display:'none'}}
+          style={{ display: 'none' }}
         >
           <span>Share it on Twitter</span>
           <span>&gt;</span>
-        </Button>
+        </Button> */}
         <Button
+          style={{ marginBottom:'1rem' }}
           className="metaplex-button"
           onClick={_ =>
             history.push(`/art/${props.nft?.metadataAccount.toString()}`)
           }
         >
-          <span>See it in your collection</span>
-          <span>&gt;</span>
+          <span>Xem trong bộ sưu tập</span>
         </Button>
         <Button
           className="metaplex-button"
           onClick={_ => history.push('/auction/create')}
         >
-          <span>Sell it via auction</span>
-          <span>&gt;</span>
+          <span>Bán đấu giá</span>
         </Button>
       </div>
       <Confetti />
