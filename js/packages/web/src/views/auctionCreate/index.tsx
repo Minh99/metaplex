@@ -72,7 +72,7 @@ timeDuration['hours'] = "giờ";
 timeDuration['days'] = "ngày";
 
 export enum AuctionCategory {
-  // InstantSale,
+  InstantSale,
   // Limited,
   // Single,
   // Open,
@@ -156,7 +156,6 @@ export const AuctionCreateView = () => {
   const history = useHistory();
   const mint = useMint(QUOTE_MINT);
   const { width } = useWindowDimensions();
-
   const [step, setStep] = useState<number>(0);
   const [stepsVisible, setStepsVisible] = useState<boolean>(true);
   const [auctionObj, setAuctionObj] =
@@ -171,7 +170,7 @@ export const AuctionCreateView = () => {
   const [attributes, setAttributes] = useState<AuctionState>({
     reservationPrice: 0,
     items: [],
-    category: AuctionCategory.Tiered,
+    category: AuctionCategory.InstantSale, // route
     auctionDurationType: 'minutes',
     gapTimeType: 'minutes',
     winnersCount: 1,
@@ -221,240 +220,240 @@ export const AuctionCreateView = () => {
     //     type: WinnerLimitType.Unlimited,
     //     usize: ZERO,
     //   });
-    // } else if (attributes.category === AuctionCategory.InstantSale) {
-    //   const { items, editions } = attributes;
+    if (attributes.category === AuctionCategory.InstantSale) {
+      const { items, editions } = attributes;
 
-    //   if (items.length > 0) {
-    //     const item = items[0];
-    //     if (!editions) {
-    //       item.winningConfigType =
-    //         item.metadata.info.updateAuthority ===
-    //           (wallet?.publicKey || SystemProgram.programId).toBase58()
-    //           ? WinningConfigType.FullRightsTransfer
-    //           : WinningConfigType.TokenOnlyTransfer;
-    //     }
+      if (items.length > 0) {
+        const item = items[0];
+        if (!editions) {
+          item.winningConfigType =
+            item.metadata.info.updateAuthority ===
+              (wallet?.publicKey || SystemProgram.programId).toBase58()
+              ? WinningConfigType.FullRightsTransfer
+              : WinningConfigType.TokenOnlyTransfer;
+        }
 
-    //     item.amountRanges = [
-    //       new AmountRange({
-    //         amount: new BN(1),
-    //         length: new BN(editions || 1),
-    //       }),
-    //     ];
-    //   }
+        item.amountRanges = [
+          new AmountRange({
+            amount: new BN(1),
+            length: new BN(editions || 1),
+          }),
+        ];
+      }
 
-    //   winnerLimit = new WinnerLimit({
-    //     type: WinnerLimitType.Capped,
-    //     usize: new BN(editions || 1),
-    //   });
-    // } else if (attributes.category === AuctionCategory.Open) {
-    //   if (
-    //     attributes.items.length > 0 &&
-    //     attributes.items[0].participationConfig
-    //   ) {
-    //     attributes.items[0].participationConfig.fixedPrice = new BN(
-    //       toLamports(attributes.participationFixedPrice, mint) || 0,
-    //     );
-    //   }
-    //   winnerLimit = new WinnerLimit({
-    //     type: WinnerLimitType.Unlimited,
-    //     usize: ZERO,
-    //   });
-    // } else if (
-    //   attributes.category === AuctionCategory.Limited ||
-    //   attributes.category === AuctionCategory.Single
-    // ) {
-    //   if (attributes.items.length > 0) {
-    //     const item = attributes.items[0];
-    //     if (
-    //       attributes.category == AuctionCategory.Single &&
-    //       item.masterEdition
-    //     ) {
-    //       item.winningConfigType =
-    //         item.metadata.info.updateAuthority ===
-    //           (wallet?.publicKey || SystemProgram.programId).toBase58()
-    //           ? WinningConfigType.FullRightsTransfer
-    //           : WinningConfigType.TokenOnlyTransfer;
-    //     }
-    //     item.amountRanges = [
-    //       new AmountRange({
-    //         amount: new BN(1),
-    //         length:
-    //           attributes.category === AuctionCategory.Single
-    //             ? new BN(1)
-    //             : new BN(attributes.editions || 1),
-    //       }),
-    //     ];
-    //   }
-    //   winnerLimit = new WinnerLimit({
-    //     type: WinnerLimitType.Capped,
-    //     usize:
-    //       attributes.category === AuctionCategory.Single
-    //         ? new BN(1)
-    //         : new BN(attributes.editions || 1),
-    //   });
+      winnerLimit = new WinnerLimit({
+        type: WinnerLimitType.Capped,
+        usize: new BN(editions || 1),
+      });
+      // else if (attributes.category === AuctionCategory.Open) {
+      //   if (
+      //     attributes.items.length > 0 &&
+      //     attributes.items[0].participationConfig
+      //   ) {
+      //     attributes.items[0].participationConfig.fixedPrice = new BN(
+      //       toLamports(attributes.participationFixedPrice, mint) || 0,
+      //     );
+      //   }
+      //   winnerLimit = new WinnerLimit({
+      //     type: WinnerLimitType.Unlimited,
+      //     usize: ZERO,
+      //   });
+      // } else if (
+      //   attributes.category === AuctionCategory.Limited ||
+      //   attributes.category === AuctionCategory.Single
+      // ) {
+      //   if (attributes.items.length > 0) {
+      //     const item = attributes.items[0];
+      //     if (
+      //       attributes.category == AuctionCategory.Single &&
+      //       item.masterEdition
+      //     ) {
+      //       item.winningConfigType =
+      //         item.metadata.info.updateAuthority ===
+      //           (wallet?.publicKey || SystemProgram.programId).toBase58()
+      //           ? WinningConfigType.FullRightsTransfer
+      //           : WinningConfigType.TokenOnlyTransfer;
+      //     }
+      //     item.amountRanges = [
+      //       new AmountRange({
+      //         amount: new BN(1),
+      //         length:
+      //           attributes.category === AuctionCategory.Single
+      //             ? new BN(1)
+      //             : new BN(attributes.editions || 1),
+      //       }),
+      //     ];
+      //   }
+      //   winnerLimit = new WinnerLimit({
+      //     type: WinnerLimitType.Capped,
+      //     usize:
+      //       attributes.category === AuctionCategory.Single
+      //         ? new BN(1)
+      //         : new BN(attributes.editions || 1),
+      //   });
 
-    //   if (
-    //     attributes.participationNFT &&
-    //     attributes.participationNFT.participationConfig
-    //   ) {
-    //     attributes.participationNFT.participationConfig.fixedPrice = new BN(
-    //       toLamports(attributes.participationFixedPrice, mint) || 0,
-    //     );
-    //   }
-    // } else {
-    const tiers = tieredAttributes.tiers;
-    tiers.forEach(
-      c =>
-      (c.items = c.items.filter(
-        i => (i as TierDummyEntry).winningConfigType !== undefined,
-      )),
-    );
-    let filteredTiers = tiers.filter(
-      i => i.items.length > 0 && i.winningSpots.length > 0,
-    );
+      //   if (
+      //     attributes.participationNFT &&
+      //     attributes.participationNFT.participationConfig
+      //   ) {
+      //     attributes.participationNFT.participationConfig.fixedPrice = new BN(
+      //       toLamports(attributes.participationFixedPrice, mint) || 0,
+      //     );
+      //   }
+    } else {
+      const tiers = tieredAttributes.tiers;
+      tiers.forEach(
+        c =>
+        (c.items = c.items.filter(
+          i => (i as TierDummyEntry).winningConfigType !== undefined,
+        )),
+      );
+      let filteredTiers = tiers.filter(
+        i => i.items.length > 0 && i.winningSpots.length > 0,
+      );
 
-    tieredAttributes.items.forEach((config, index) => {
-      let ranges: AmountRange[] = [];
-      filteredTiers.forEach(tier => {
-        const tierRangeLookup: Record<number, AmountRange> = {};
-        const tierRanges: AmountRange[] = [];
-        const item = tier.items.find(
-          i => (i as TierDummyEntry).safetyDepositBoxIndex == index,
-        );
+      tieredAttributes.items.forEach((config, index) => {
+        let ranges: AmountRange[] = [];
+        filteredTiers.forEach(tier => {
+          const tierRangeLookup: Record<number, AmountRange> = {};
+          const tierRanges: AmountRange[] = [];
+          const item = tier.items.find(
+            i => (i as TierDummyEntry).safetyDepositBoxIndex == index,
+          );
 
-        if (item) {
-          config.winningConfigType = (
-            item as TierDummyEntry
-          ).winningConfigType;
-          const sorted = tier.winningSpots.sort();
-          sorted.forEach((spot, i) => {
-            if (tierRangeLookup[spot - 1]) {
-              tierRangeLookup[spot] = tierRangeLookup[spot - 1];
-              tierRangeLookup[spot].length = tierRangeLookup[spot].length.add(
-                new BN(1),
-              );
-            } else {
-              tierRangeLookup[spot] = new AmountRange({
-                amount: new BN((item as TierDummyEntry).amount),
-                length: new BN(1),
-              });
-              // If the first spot with anything is winner spot 1, you want a section of 0 covering winning
-              // spot 0.
-              // If we have a gap, we want a gap area covered with zeroes.
-              const zeroLength = i - 1 > 0 ? spot - sorted[i - 1] - 1 : spot;
-              if (zeroLength > 0) {
-                tierRanges.push(
+          if (item) {
+            config.winningConfigType = (
+              item as TierDummyEntry
+            ).winningConfigType;
+            const sorted = tier.winningSpots.sort();
+            sorted.forEach((spot, i) => {
+              if (tierRangeLookup[spot - 1]) {
+                tierRangeLookup[spot] = tierRangeLookup[spot - 1];
+                tierRangeLookup[spot].length = tierRangeLookup[spot].length.add(
+                  new BN(1),
+                );
+              } else {
+                tierRangeLookup[spot] = new AmountRange({
+                  amount: new BN((item as TierDummyEntry).amount),
+                  length: new BN(1),
+                });
+                // If the first spot with anything is winner spot 1, you want a section of 0 covering winning
+                // spot 0.
+                // If we have a gap, we want a gap area covered with zeroes.
+                const zeroLength = i - 1 > 0 ? spot - sorted[i - 1] - 1 : spot;
+                if (zeroLength > 0) {
+                  tierRanges.push(
+                    new AmountRange({
+                      amount: new BN(0),
+                      length: new BN(zeroLength),
+                    }),
+                  );
+                }
+                tierRanges.push(tierRangeLookup[spot]);
+              }
+            });
+            // Ok now we have combined ranges from this tier range. Now we merge them into the ranges
+            // at the top level.
+            let oldRanges = ranges;
+            ranges = [];
+            let oldRangeCtr = 0,
+              tierRangeCtr = 0;
+
+            while (
+              oldRangeCtr < oldRanges.length ||
+              tierRangeCtr < tierRanges.length
+            ) {
+              let toAdd = new BN(0);
+              if (
+                tierRangeCtr < tierRanges.length &&
+                tierRanges[tierRangeCtr].amount.gt(new BN(0))
+              ) {
+                toAdd = tierRanges[tierRangeCtr].amount;
+              }
+
+              if (oldRangeCtr == oldRanges.length) {
+                ranges.push(
                   new AmountRange({
-                    amount: new BN(0),
-                    length: new BN(zeroLength),
+                    amount: toAdd,
+                    length: tierRanges[tierRangeCtr].length,
                   }),
                 );
+                tierRangeCtr++;
+              } else if (tierRangeCtr == tierRanges.length) {
+                ranges.push(oldRanges[oldRangeCtr]);
+                oldRangeCtr++;
+              } else if (
+                oldRanges[oldRangeCtr].length.gt(
+                  tierRanges[tierRangeCtr].length,
+                )
+              ) {
+                oldRanges[oldRangeCtr].length = oldRanges[
+                  oldRangeCtr
+                ].length.sub(tierRanges[tierRangeCtr].length);
+
+                ranges.push(
+                  new AmountRange({
+                    amount: oldRanges[oldRangeCtr].amount.add(toAdd),
+                    length: tierRanges[tierRangeCtr].length,
+                  }),
+                );
+
+                tierRangeCtr += 1;
+                // dont increment oldRangeCtr since i still have length to give
+              } else if (
+                tierRanges[tierRangeCtr].length.gt(
+                  oldRanges[oldRangeCtr].length,
+                )
+              ) {
+                tierRanges[tierRangeCtr].length = tierRanges[
+                  tierRangeCtr
+                ].length.sub(oldRanges[oldRangeCtr].length);
+
+                ranges.push(
+                  new AmountRange({
+                    amount: oldRanges[oldRangeCtr].amount.add(toAdd),
+                    length: oldRanges[oldRangeCtr].length,
+                  }),
+                );
+
+                oldRangeCtr += 1;
+                // dont increment tierRangeCtr since they still have length to give
+              } else if (
+                tierRanges[tierRangeCtr].length.eq(
+                  oldRanges[oldRangeCtr].length,
+                )
+              ) {
+                ranges.push(
+                  new AmountRange({
+                    amount: oldRanges[oldRangeCtr].amount.add(toAdd),
+                    length: oldRanges[oldRangeCtr].length,
+                  }),
+                );
+                // Move them both in this degen case
+                oldRangeCtr++;
+                tierRangeCtr++;
               }
-              tierRanges.push(tierRangeLookup[spot]);
-            }
-          });
-          // Ok now we have combined ranges from this tier range. Now we merge them into the ranges
-          // at the top level.
-          let oldRanges = ranges;
-          ranges = [];
-          let oldRangeCtr = 0,
-            tierRangeCtr = 0;
-
-          while (
-            oldRangeCtr < oldRanges.length ||
-            tierRangeCtr < tierRanges.length
-          ) {
-            let toAdd = new BN(0);
-            if (
-              tierRangeCtr < tierRanges.length &&
-              tierRanges[tierRangeCtr].amount.gt(new BN(0))
-            ) {
-              toAdd = tierRanges[tierRangeCtr].amount;
-            }
-
-            if (oldRangeCtr == oldRanges.length) {
-              ranges.push(
-                new AmountRange({
-                  amount: toAdd,
-                  length: tierRanges[tierRangeCtr].length,
-                }),
-              );
-              tierRangeCtr++;
-            } else if (tierRangeCtr == tierRanges.length) {
-              ranges.push(oldRanges[oldRangeCtr]);
-              oldRangeCtr++;
-            } else if (
-              oldRanges[oldRangeCtr].length.gt(
-                tierRanges[tierRangeCtr].length,
-              )
-            ) {
-              oldRanges[oldRangeCtr].length = oldRanges[
-                oldRangeCtr
-              ].length.sub(tierRanges[tierRangeCtr].length);
-
-              ranges.push(
-                new AmountRange({
-                  amount: oldRanges[oldRangeCtr].amount.add(toAdd),
-                  length: tierRanges[tierRangeCtr].length,
-                }),
-              );
-
-              tierRangeCtr += 1;
-              // dont increment oldRangeCtr since i still have length to give
-            } else if (
-              tierRanges[tierRangeCtr].length.gt(
-                oldRanges[oldRangeCtr].length,
-              )
-            ) {
-              tierRanges[tierRangeCtr].length = tierRanges[
-                tierRangeCtr
-              ].length.sub(oldRanges[oldRangeCtr].length);
-
-              ranges.push(
-                new AmountRange({
-                  amount: oldRanges[oldRangeCtr].amount.add(toAdd),
-                  length: oldRanges[oldRangeCtr].length,
-                }),
-              );
-
-              oldRangeCtr += 1;
-              // dont increment tierRangeCtr since they still have length to give
-            } else if (
-              tierRanges[tierRangeCtr].length.eq(
-                oldRanges[oldRangeCtr].length,
-              )
-            ) {
-              ranges.push(
-                new AmountRange({
-                  amount: oldRanges[oldRangeCtr].amount.add(toAdd),
-                  length: oldRanges[oldRangeCtr].length,
-                }),
-              );
-              // Move them both in this degen case
-              oldRangeCtr++;
-              tierRangeCtr++;
             }
           }
-        }
+        });
+        console.log('Ranges');
+        config.amountRanges = ranges;
       });
-      console.log('Ranges');
-      config.amountRanges = ranges;
-    });
 
-    winnerLimit = new WinnerLimit({
-      type: WinnerLimitType.Capped,
-      usize: new BN(attributes.winnersCount),
-    });
-    if (
-      attributes.participationNFT &&
-      attributes.participationNFT.participationConfig
-    ) {
-      attributes.participationNFT.participationConfig.fixedPrice = new BN(
-        toLamports(attributes.participationFixedPrice, mint) || 0,
-      );
+      winnerLimit = new WinnerLimit({
+        type: WinnerLimitType.Capped,
+        usize: new BN(attributes.winnersCount),
+      });
+      if (
+        attributes.participationNFT &&
+        attributes.participationNFT.participationConfig
+      ) {
+        attributes.participationNFT.participationConfig.fixedPrice = new BN(
+          toLamports(attributes.participationFixedPrice, mint) || 0,
+        );
+      }
+      console.log('Tiered settings', tieredAttributes.items);
     }
-    console.log('Tiered settings', tieredAttributes.items);
-    // }
 
     const isInstantSale =
       attributes.instantSalePrice &&
@@ -617,13 +616,13 @@ export const AuctionCreateView = () => {
   const congratsStep = <Congrats auction={auctionObj} />;
 
   const stepsByCategory = {
-    // [AuctionCategory.InstantSale]: [
-    //   ['Category', categoryStep],
-    //   ['Instant Sale', instantSaleStep],
-    //   ['Review', reviewStep],
-    //   ['Publish', waitStep],
-    //   [undefined, congratsStep],
-    // ],
+    [AuctionCategory.InstantSale]: [
+      ['Danh mục', categoryStep],
+      ['Chọn sản phẩm', instantSaleStep],
+      ['Chi tiết', reviewStep],
+      ['Xác Nhận', waitStep],
+      [undefined, congratsStep],
+    ],
     // [AuctionCategory.Limited]: [
     //   ['Category', categoryStep],
     //   ['Copies', copiesStep],
@@ -717,21 +716,21 @@ const CategoryStep = (props: {
       </Row>
       <Row justify={width < 768 ? 'center' : 'start'} >
         <Col>
-          {/* <Row >
+          <Row >
             <Button
               className="type-btn"
               size="large"
               onClick={() => props.confirm(AuctionCategory.InstantSale)}
             >
               <div>
-                <div>Instant Sale</div>
+                <div>Rao Bán</div>
                 <div className="type-btn-description">
-                  At a fixed price, sell a single Master NFT or copies of it
+                  Người tham gia mua sản phẩm với mức giá cố định
                 </div>
               </div>
             </Button>
           </Row>
-          <Row >
+          {/* <Row >
             <Button
               className="type-btn"
               size="large"
@@ -744,8 +743,8 @@ const CategoryStep = (props: {
                 </div>
               </div>
             </Button>
-          </Row>
-          <Row >
+          </Row> */}
+          {/* <Row >
             <Button
               className="type-btn"
               size="large"
@@ -834,7 +833,7 @@ const InstantSaleStep = ({
   return (
     <>
       <Row className="call-to-action" style={{ marginBottom: 0 }}>
-        <h2>Select which item to sell:</h2>
+        <h2>Chọn sản phẩm đăng bán</h2>
       </Row>
 
       <Row className="content-action">
@@ -851,8 +850,9 @@ const InstantSaleStep = ({
           </ArtSelector>
 
           {shouldRenderSelect && (
-            <label className="action-field">
+            <label className="action-field" style={{ display: 'none' }}>
               <Select
+                style={{ width: 'fit-content' }}
                 defaultValue={
                   attributes.instantSaleType || InstantSaleType.Single
                 }
@@ -866,7 +866,7 @@ const InstantSaleStep = ({
                 <Option value={InstantSaleType.Single}>
                   Sell unique token
                 </Option>
-                {copiesEnabled && (
+                {/* {copiesEnabled && (
                   <Option value={InstantSaleType.Limited}>
                     Sell limited number of copies
                   </Option>
@@ -875,9 +875,9 @@ const InstantSaleStep = ({
                   <Option value={InstantSaleType.Open}>
                     Sell unlimited number of copies
                   </Option>
-                )}
+                )} */}
               </Select>
-              {isLimitedEdition && (
+              {/* {isLimitedEdition && (
                 <>
                   <span className="field-info">
                     Each copy will be given unique edition number e.g. 1 of 30
@@ -895,11 +895,11 @@ const InstantSaleStep = ({
                     }
                   />
                 </>
-              )}
+              )} */}
             </label>
           )}
           <label className="action-field">
-            <span className="field-title">Auction mint</span>
+            <span className="field-title">Loại tiền thanh toán</span>
             <TokenButton mint={mint} onClick={() => setShowTokenDialog(true)} />
             <TokenDialog
               setMint={setMint}
@@ -911,16 +911,16 @@ const InstantSaleStep = ({
           </label>
 
           <label className="action-field">
-            <span className="field-title">Price</span>
+            <span className="field-title">Giá bán</span>
             <span className="field-info">
-              This is the instant sale price for your item.
+              Giá bán sản phẩm của bạn.
             </span>
             <Input
               type="number"
               min={0}
               autoFocus
               className="input"
-              placeholder="Price"
+              placeholder="Nhập giá bán"
               prefix="◎"
               suffix={mintInfo?.symbol || "CUSTOM"}
               onChange={info =>
@@ -1007,7 +1007,7 @@ const CopiesStep = (props: {
           </ArtSelector>
 
           <label className="action-field">
-            <span className="field-title">Auction mint</span>
+            <span className="field-title">Loại tiền thanh toán</span>
             <TokenButton mint={mint} onClick={() => setShowTokenDialog(true)} />
             <TokenDialog
               setMint={setMint}
@@ -1104,7 +1104,7 @@ const CopiesStep = (props: {
 //           </label>
 
 //           <label className="action-field">
-//             <span className="field-title">Auction mint</span>
+//             <span className="field-title">Loại tiền thanh toán</span>
 //             <span className="field-info">
 //               This will be the quote mint for your auction.
 //             </span>
@@ -1307,7 +1307,7 @@ const InitialPhaseStep = (props: {
               onChange={info => setStartNow(info.target.value === 'now')}
             >
               <Radio className="radio-field" value="now">
-                Ngay bây giờ  
+                Ngay bây giờ
               </Radio>
               <div className="radio-subtitle">
                 Người tham gia có thể  bắt đầu ngay sau khi bạn thiết lập xong phiên đấu giá.
@@ -1336,7 +1336,7 @@ const InitialPhaseStep = (props: {
                 )}
               </label>
 
-              <label className="action-field" style={{display: 'none'}}>
+              <label className="action-field" style={{ display: 'none' }}>
                 <span className="field-title">
                   When do you want the listing to go live?
                 </span>
@@ -1561,7 +1561,7 @@ const TierTableStep = (props: {
       setHasItem(true);
     }
   }, [props.attributes.tiers]);
-  console.log(hasItem);
+  // console.log(hasItem);
 
   return (
     <>
@@ -1600,7 +1600,7 @@ const TierTableStep = (props: {
           /> */}
 
           {wcg.items.map((i, itemIndex) => (
-            <Col className="section" xl={8} key={itemIndex} style={{ marginRight: '1rem', textAlign:'center' }}>
+            <Col className="section" xl={8} key={itemIndex} style={{ marginRight: '1rem', textAlign: 'center' }}>
               <Card>
                 <ArtSelector
                   filter={artistFilter}
@@ -1921,8 +1921,8 @@ const ReviewStep = (props: {
   }, [setCost]);
 
   let item = props.attributes.items?.[0];
-  console.log(item?.metadata.info);
-  
+  let cate = props.attributes.category;
+
   return (
     <>
       <Row className="call-to-action">
@@ -1933,7 +1933,7 @@ const ReviewStep = (props: {
           {item?.metadata.info !== undefined ? (
             <ArtCard pubkey={item.metadata.pubkey} small={true} />
           ) : (
-            <div style={{ textAlign: 'center', border: '3px solid gray', borderRadius: '5px' ,height: "100%", width: '80%', paddingTop: '15vh' }}>
+            <div style={{ textAlign: 'center', border: '3px solid gray', borderRadius: '5px', height: "100%", width: '80%', paddingTop: '15vh' }}>
               <Spin />
             </div>
           )}
@@ -1941,7 +1941,7 @@ const ReviewStep = (props: {
         <Col className="section" xl={12}>
           <Statistic
             className="create-statistic"
-            title="Bản sao"
+            title="Phiên bản"
             value={
               props.attributes.editions === undefined
                 ? 'Duy nhất'
@@ -1956,7 +1956,7 @@ const ReviewStep = (props: {
           )}
         </Col>
       </Row>
-      <Row style={{ display: 'block' }}>
+      <Row style={{ display: 'flex', flexDirection: 'column' }}>
         <Divider />
         <Statistic
           className="create-statistic"
@@ -1989,22 +1989,22 @@ const ReviewStep = (props: {
         {props.attributes.priceFloor && (
           <Statistic
             className="create-statistic"
-            title="Giá khởi điểm"
-            value={props.attributes.priceFloor + " SOL" }
+            title={cate == 0 ? "Giá bán" : "Giá khởi điểm"}
+            value={props.attributes.priceFloor + " SOL"}
           />
         )}
         {props.attributes.priceTick && (
           <Statistic
             className="create-statistic"
             title="Bước giá"
-            value={props.attributes.priceTick + " SOL" }
+            value={props.attributes.priceTick + " SOL"}
           />
         )}
         {props.attributes.participationFixedPrice && (
           <Statistic
             className="create-statistic"
             title="Phí tham gia"
-            value={props.attributes.participationFixedPrice + " SOL" }
+            value={props.attributes.participationFixedPrice + " SOL"}
           />
         )}
         <Divider />
@@ -2037,7 +2037,7 @@ const ReviewStep = (props: {
         >
           {props.attributes.category === AuctionCategory.Tiered
             ? 'Hoàn tất'
-            : 'List for Sale'}
+            : 'Tiếp tục'}
         </Button>
       </Row>
     </>
@@ -2074,9 +2074,9 @@ const WaitingStep = (props: {
     >
       <Progress type="circle" percent={progress} />
       <div className="waiting-title">
-        Your creation is being listed with Metaplex...
+        Đang khởi tạo
       </div>
-      <div className="waiting-subtitle">This can take up to 30 seconds.</div>
+      <div className="waiting-subtitle">Vui lòng chờ giây lát</div>
     </div>
   );
 };
@@ -2114,10 +2114,10 @@ const Congrats = (props: {
         }}
       >
         <div className="waiting-title">
-          Congratulations! Your auction is now live.
+          Khởi tạo thành công! Sản phẩm của bạn đã được đăng bán.
         </div>
         <div className="congrats-button-container">
-          <Button
+          {/* <Button
             className="metaplex-button"
             onClick={_ => window.open(newTweetURL(), '_blank')}
 
@@ -2125,15 +2125,14 @@ const Congrats = (props: {
           >
             <span>Share it on Twitter</span>
             <span>&gt;</span>
-          </Button>
+          </Button> */}
           <Button
             className="metaplex-button"
             onClick={_ =>
               history.push(`/auction/${props.auction?.auction.toString()}`)
             }
           >
-            <span>See it in your auctions</span>
-            <span>&gt;</span>
+            <span>Xem</span>
           </Button>
         </div>
       </div>

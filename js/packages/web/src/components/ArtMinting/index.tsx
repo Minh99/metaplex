@@ -240,7 +240,7 @@ export const ArtMinting = ({ id, onMint }: ArtMintingProps) => {
               }}
               className="overlay-btn"
             >
-              Got it
+              Đóng
             </Button>
           </MetaplexOverlay>
         </div>

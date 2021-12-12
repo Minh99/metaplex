@@ -22,8 +22,8 @@ export const useActionButtonContent = (auctionView: AuctionView): string => {
   }
 
   if (canEndInstantSale) {
-    return 'End sale & claim item';
+    return 'Kết thúc và nhận lại sản phẩm';
   }
 
-  return 'Buy now';
+  return 'Mua ngay';
 };

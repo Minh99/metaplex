@@ -40,6 +40,9 @@ import { MetaAvatar, MetaAvatarDetailed } from '../../components/MetaAvatar';
 import { AmountLabel } from '../../components/AmountLabel';
 import { ClickToCopy } from '../../components/ClickToCopy';
 import { useTokenList } from '../../contexts/tokenList';
+import { Tooltip } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
+
 
 export const AuctionItem = ({
   item,
@@ -58,9 +61,9 @@ export const AuctionItem = ({
       index === 0
         ? ''
         : `translate(${index * 15}px, ${-40 * index}px) scale(${Math.max(
-            1 - 0.2 * index,
-            0,
-          )})`,
+          1 - 0.2 * index,
+          0,
+        )})`,
     transformOrigin: 'right bottom',
     position: index !== 0 ? 'absolute' : 'static',
     zIndex: -1 * index,
@@ -163,13 +166,13 @@ export const AuctionView = () => {
 
           <div className="info-container">
             <div className={'info-component'}>
-              <h6 className={'info-title'}>Edition</h6>
+              <h6 className={'info-title'}>Phiên bản</h6>
               <span>
                 {(auction?.items.length || 0) > 1 ? 'Multiple' : edition}
               </span>
             </div>
-            <div className={'info-component'}>
-              <h6 className={'info-title'}>Winners</h6>
+            {/* <div className={'info-component'}>
+              <h6 className={'info-title'}>Số người thắng</h6>
               <span>
                 {winnerCount === undefined ? (
                   <Skeleton paragraph={{ rows: 0 }} />
@@ -179,7 +182,7 @@ export const AuctionView = () => {
                   winnerCount
                 )}
               </span>
-            </div>
+            </div> */}
             <div className={'info-component'}>
               <h6 className={'info-title'}>NFTS</h6>
               <span>
@@ -240,7 +243,7 @@ export const AuctionView = () => {
         </Col>
         <Col className="auction-mobile-section" span={24}>
           <div className={'info-view'}>
-            <h6 className={'info-title'}>View on</h6>
+            <h6 className={'info-title'}>Xem thông tin</h6>
             <div style={{ display: 'flex' }}>
               <Button
                 className="tag"
@@ -274,7 +277,7 @@ export const AuctionView = () => {
     );
   } else {
     return (
-      <Row justify="center" ref={ref} gutter={[48, 0]} style={{fontSize: '1.4rem'}} >
+      <Row justify="center" ref={ref} gutter={[48, 0]} style={{ fontSize: '1.4rem' }} >
         <Col span={24} md={10} className={'img-cont-500'}>
           <div className="auction-view" style={{ minHeight: 300 }}>
             <Carousel
@@ -285,7 +288,7 @@ export const AuctionView = () => {
             </Carousel>
           </div>
           <h6 className={'about-nft-collection'}>
-            ABOUT THIS {nftCount === 1 ? 'NFT' : 'COLLECTION'}
+            Thông tin mô tả {nftCount === 1 ? 'NFT' : 'COLLECTION'}
           </h6>
           <p className={'about-nft-collection a-description'}>
             {hasDescription && <Skeleton paragraph={{ rows: 3 }} />}
@@ -324,29 +327,35 @@ export const AuctionView = () => {
             <Col span={12} md={16}>
               <div className={'info-container'}>
                 <div className={'info-component'}>
-                  <h6 className={'info-title'}>CREATED BY</h6>
+                  <h6 className={'info-info'}>Người chế tạo</h6>
                   <span>{<MetaAvatar creators={creators} />}</span>
+                  <Tooltip title="Sao chép địa chỉ">
+                    <div
+                      style={{
+                        fontWeight: 600,
+                        letterSpacing: '-0.02em',
+                        color: '#FFFFFF',
+                        display: 'flex',
+                        marginTop: '1rem',
+                      }}
+                      onClick={() =>
+                        navigator.clipboard.writeText(creators[0]?.address || '')
+                      }
+                    >
+                      <CopyOutlined />
+                      &nbsp;{ creators[0]?.address ? shortenAddress(creators[0]?.address) : "" }
+                    </div>
+                  </Tooltip>
+                  
                 </div>
                 <div className={'info-component'}>
-                  <h6 className={'info-title'}>Edition</h6>
+                  <h6 className={'info-info'}>Phiên bản </h6>
                   <span>
                     {(auction?.items.length || 0) > 1 ? 'Multiple' : edition}
                   </span>
                 </div>
                 <div className={'info-component'}>
-                  <h6 className={'info-title'}>Winners</h6>
-                  <span>
-                    {winnerCount === undefined ? (
-                      <Skeleton paragraph={{ rows: 0 }} />
-                    ) : isOpen ? (
-                      'Unlimited'
-                    ) : (
-                      winnerCount
-                    )}
-                  </span>
-                </div>
-                <div className={'info-component'}>
-                  <h6 className={'info-title'}>NFTS</h6>
+                  <h6 className={'info-info'}>NFTS</h6>
                   <span>
                     {nftCount === undefined ? (
                       <Skeleton paragraph={{ rows: 0 }} />
@@ -358,13 +367,12 @@ export const AuctionView = () => {
                   </span>
                 </div>
                 <div className={'info-component'}>
-                  <h6 className={'info-title'}>CURRENCY</h6>
+                  <h6 className={'info-info'}>Phương thức thanh toán</h6>
                   <span>
                     {nftCount === undefined ? (
                       <Skeleton paragraph={{ rows: 0 }} />
                     ) : (
-                      `${tokenInfo?.name || 'Custom Token'} ($${
-                        tokenInfo?.symbol || 'CUSTOM'
+                      `${tokenInfo?.name || 'Custom Token'} ($${tokenInfo?.symbol || 'CUSTOM'
                       })`
                     )}
                     <ClickToCopy
@@ -382,7 +390,7 @@ export const AuctionView = () => {
             <Col span={12} md={8} className="view-on-container">
               <div className="info-view-container">
                 <div className="info-view">
-                  <h6 className="info-title">View on</h6>
+                  <h6 className="info-title">Xem thông tin</h6>
                   <div style={{ display: 'flex' }}>
                     <Button
                       className="tag"
@@ -462,7 +470,7 @@ const BidLine = (props: {
   }, [bidderTwitterHandle]);
   const { width } = useWindowDimensions();
   // console.log(format(bid.info.lastBidTimestamp.toNumber() * 1000));
-  
+
   if (width < 768) {
     return (
       <Row className="mobile-bid-history">
@@ -489,7 +497,7 @@ const BidLine = (props: {
           </div>
           <div>
             {!isCancelled && (
-              <div className={'flex '}>
+              <div className={'flex'}>
                 {isme && (
                   <>
                     <CheckOutlined />
@@ -555,8 +563,17 @@ const BidLine = (props: {
           )}
         </Col>
         <Col span={8} style={{ opacity: 0.7 }}>
-          {/* uses milliseconds */}
-          {format(bid.info.lastBidTimestamp.toNumber() * 1000)}
+          {format(bid.info.lastBidTimestamp.toNumber() * 1000).replace(/days ago|day ago|hour ago|hours ago|minute ago|minutes ago|second ago|seconds ago/, function (x) {
+            if (x == "days ago" ||  x == "day ago") {
+              return "ngày trước";
+            } if (x == "hours ago" || x == "hour ago") {
+              return "giờ trước";
+            }if (x == "minutes ago" || x == "minute ago") {
+              return "phút trước";
+            }else{
+              return "giây trước";
+            }
+          })}
         </Col>
         <Col span={8}>
           <div className={'flex-right'}>
@@ -648,7 +665,7 @@ export const AuctionBids = ({
 
   if (!auctionView || bids.length < 1) return null;
   // console.log(bidLines);
-  
+
   return (
     <Row>
       <Col className="bids-lists">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ArtCard } from '../../components/ArtCard';
 import { Layout, Row, Col, Tabs } from 'antd';
 import Masonry from 'react-masonry-css';
@@ -70,6 +70,14 @@ export const ArtworksView = () => {
         : [...Array(10)].map((_, idx) => <CardLoader key={idx} />)}
     </Masonry>
   );
+  const { whitelistedCreatorsByCreator, store } = useMeta();
+  const pubkey = publicKey?.toBase58() || '';
+  const canCreate = useMemo(() => {
+    return (
+      store?.info?.public ||
+      whitelistedCreatorsByCreator[pubkey]?.info?.activated
+    );
+  }, [pubkey, whitelistedCreatorsByCreator, store]);
 
   return (
     <Layout style={{ margin: 0, marginTop: 30 }}>
@@ -94,7 +102,7 @@ export const ArtworksView = () => {
                   {artworkGrid}
                 </TabPane>
               )}
-              {connected && (
+              {connected && canCreate && (
                 <TabPane
                   tab={<span className="tab-title">Đã chế  tạo</span>}
                   key={ArtworkViewState.Created}
@@ -102,10 +110,10 @@ export const ArtworksView = () => {
                   {artworkGrid}
                 </TabPane>
               )}
+              {connected && storeIndexer.length !== 0 && (
+                <a onClick={() => pullAllMetadata()}>Làm mới dữ liệu</a>
+              )}
             </Tabs>
-            {connected && storeIndexer.length !== 0 && (
-              <a onClick={() => pullAllMetadata()}>Load all metadata</a>
-            )}
           </Row>
         </Col>
       </Content>

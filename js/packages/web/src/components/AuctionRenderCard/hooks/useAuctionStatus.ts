@@ -58,7 +58,8 @@ export const useAuctionStatus = (
   if (auctionView.isInstantSale) {
     const soldOut = bids.length === auctionView.items.length;
 
-    status = auctionView.state === AuctionViewState.Ended ? 'Ended' : 'Price';
+    status =
+      auctionView.state === AuctionViewState.Ended ? 'Đã kết thúc' : 'Giá';
 
     if (soldOut && !isOpen) {
       status = 'Sold Out';
@@ -66,7 +67,7 @@ export const useAuctionStatus = (
 
     amount = formatTokenAmount(
       auctionView.auctionDataExtended?.info.instantSalePrice?.toNumber(),
-      mintInfo
+      mintInfo,
     );
 
     return {
@@ -77,19 +78,19 @@ export const useAuctionStatus = (
 
   if (bids.length > 0 && !isOpen) {
     amount = formatTokenAmount(winningBid.info.lastBid);
-    status = 'Current Bid';
+    status = 'Đang đấu giá';
   }
 
   if (ended) {
     if (bids.length === 0) {
       return {
-        status: 'Ended',
+        status: 'Đã kết thúc',
         amount,
       };
     }
 
     return {
-      status: 'Winning Bid',
+      status: 'Thắng đấu giá',
       amount,
     };
   }

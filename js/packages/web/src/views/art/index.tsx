@@ -61,13 +61,12 @@ export const ArtView = () => {
   const attributes = data?.attributes;
 
   const pubkey = wallet?.publicKey?.toBase58() || '';
-
   const tag = (
     <div className="info-header">
       <Tag color="blue">UNVERIFIED</Tag>
     </div>
   );
-
+  
   const unverified = (
     <>
       {tag}
@@ -84,6 +83,7 @@ export const ArtView = () => {
 
   return (
     <Content>
+      { art.creators?.[0] ?
       <Col>
         <Row ref={ref}>
           <Col
@@ -117,7 +117,7 @@ export const ArtView = () => {
               <Col span={6}>
                 <h6>Phí Bản Quyền</h6>
                 <div className="royalties">
-                  {((art.seller_fee_basis_points || 0) / 100).toFixed(2)}%
+                  {((art.seller_fee_basis_points || 0)).toFixed(2)}%
                 </div>
               </Col>
               <Col span={12}>
@@ -183,18 +183,18 @@ export const ArtView = () => {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'flex-start', justifyItems: 'center', marginTop: 5, tabSize: 4 }}>
                   <h6>Tổng cung (supply):  &nbsp;</h6>
-                  <div className="art-edition">{suppLy}</div>
+                  <div className="art-edition">{maxSupply}</div>
                 </div>
               </Col>
             </Row>
-            {art.type === ArtType.Master && (
+            {/* {art.type === ArtType.Master && (
               <Row>
                 <Col>
                   <h6 style={{ marginTop: 5 }}>Max Supply</h6>
                   <div className="art-edition">{maxSupply}</div>
                 </Col>
               </Row>
-            )}
+            )} */}
             {/* <Button
                   onClick={async () => {
                     if(!art.mint) {
@@ -232,7 +232,7 @@ export const ArtView = () => {
             <Divider />
             {art.creators?.find(c => !c.verified) && unverified}
             <br />
-            <div className="info-header">ABOUT THE CREATION</div>
+            <div className="info-header">Mô tả về sản phẩn</div>
             <div className="info-content">{description}</div>
             <br />
             {/*
@@ -245,7 +245,7 @@ export const ArtView = () => {
               <>
                 <Divider />
                 <br />
-                <div className="info-header">Attributes</div>
+                <div className="info-header">Thuộc tính</div>
                 <List size="large" grid={{ column: 4 }}>
                   {attributes.map(attribute => (
                     <List.Item key={attribute.trait_type}>
@@ -260,6 +260,11 @@ export const ArtView = () => {
           </Col>
         </Row>
       </Col>
+      : 
+      <p style={{ width: '100%',color: 'white', textAlign: 'center', fontSize: '1.4rem', marginTop: '3rem', wordSpacing: '4px' }}>
+        Sản phẩm có địa chỉ <span style={{ color: '#8181b3', fontSize: '1.4rem'}}>{id}</span> bạn tìm kiếm không tồn tại.
+      </p>
+      }
     </Content>
   );
 };

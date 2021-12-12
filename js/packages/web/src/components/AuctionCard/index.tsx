@@ -317,14 +317,29 @@ export const AuctionCard = ({
     value * LAMPORTS_PER_MINT < priceFloor ||
     (minBid && value < minBid) ||
     loading ||
-    !accountByMint.get(QUOTE_MINT.toBase58());
+    !accountByMint.get(QUOTE_MINT.toBase58()) ||
+    minBid >= balance.balance;
+
+  const [isContainInAuction, setIsContain] = useState(false);
 
   useEffect(() => {
     if (wallet.connected) {
       if (wallet.publicKey && !showPlaceBid) setShowPlaceBid(true);
+
+      if (auctionView.auction.info.bidState.bids.length > 0) {
+        for (let index = 0; index < auctionView.auction.info.bidState.bids.length; index++) {
+          const element = auctionView.auction.info.bidState.bids[index];
+          if (element.key === wallet?.publicKey?.toBase58()) {
+            setIsContain(true);
+          }
+        }
+      }
     } else {
       if (showPlaceBid) setShowPlaceBid(false);
     }
+
+    
+
   }, [wallet.connected]);
 
   const endInstantSale = async () => {
@@ -355,6 +370,7 @@ export const AuctionCard = ({
 
     return instantSale();
   };
+  // console.log(winnerIndex);
 
   const instantSale = async () => {
     setLoading(true);
@@ -482,13 +498,14 @@ export const AuctionCard = ({
     return <></>;
   }
   console.log(auctionView.auction.info);
-
+  console.log(minBid + " : " + balance.balance);
+  
   return (
     <div className="auction-container" style={style}>
       <div className={'time-info'}>
         {(!auctionView.isInstantSale && !auctionView.auction.info.ended()) && (
           <>
-            <span>Thời gian còn lại </span>
+            <span>Thời gian còn lại: </span>
             <div>
               <AuctionCountdown auctionView={auctionView} labels={false} />
             </div>
@@ -497,20 +514,22 @@ export const AuctionCard = ({
         {(auctionView.auction.info.ended()) && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <h2>Phiên đấu giá đã kết thúc</h2>
-            <span>
-              {
-                eligibleForAnything ? (
-                  "Chúc mừng bạn đã thắng phiên đấu giá này."
-                ) : (
-                  `${wallet?.publicKey &&
-                    auctionView.auctionManager.authority !==
-                    wallet.publicKey.toBase58()
-                    ? "Thật tiếc! bạn đã thua trong phiên đấu giá này."
-                    : ""
-                  }`
-                )
-              }
-            </span>
+            {isContainInAuction &&
+              <span>
+                {
+                  eligibleForAnything ? (
+                    "Chúc mừng bạn đã thắng phiên đấu giá này."
+                  ) : (
+                    `${wallet?.publicKey &&
+                      auctionView.auctionManager.authority !==
+                      wallet.publicKey.toBase58()
+                      ? "Thật tiếc! bạn đã thua trong phiên đấu giá này."
+                      : ""
+                    }`
+                  )
+                }
+              </span>
+            }
             {wallet?.publicKey &&
               auctionView.auctionManager.authority ===
               wallet.publicKey.toBase58() &&
@@ -599,7 +618,10 @@ export const AuctionCard = ({
                     auctionView.auctionManager.authority !==
                     wallet.publicKey.toBase58()
                     ? 'Nhận lại Sol'
-                    : ''
+                    : 
+                    auctionView.auction.info.bidState.bids.length === 0 ?
+                    'Lấy lại sản phẩm' :
+                    ''
                   }`
                 )}
               </Button>
@@ -608,7 +630,7 @@ export const AuctionCard = ({
             (
               <div className="show-place-bid">
                 <AmountLabel
-                  title="Số Sol hiện tại"
+                  title={(minBid >= balance.balance && minBid < 9999999) ? "Số Sol hiện tại không đủ" :  "Số Sol hiện tại"}
                   displaySymbol={tokenInfo?.symbol || 'CUSTOM'}
                   style={{ marginBottom: 0 }}
                   amount={balance.balance}
@@ -616,7 +638,7 @@ export const AuctionCard = ({
                   customPrefix={
                     <Identicon
                       address={wallet?.publicKey?.toBase58()}
-                      style={{ width: 36 }}
+                      style={{ width: 55 }}
                     />
                   }
                 />
@@ -658,7 +680,7 @@ export const AuctionCard = ({
                           else connect();
                         }}
                       >
-                        Place Bid
+                        Đặt giá
                       </Button>
                     )
                   ))}
@@ -693,7 +715,7 @@ export const AuctionCard = ({
                   color: 'rgba(255, 255, 255, 0.7)',
                 }}
               >
-                your bid
+                Giá thầu của bạn
               </div>
               <div className={'bid-container'}>
                 <div
@@ -718,8 +740,8 @@ export const AuctionCard = ({
                     }
                     placeholder={
                       minBid === 0
-                        ? `Place a Bid`
-                        : `Bid ${minBid} ${symbol} or more`
+                        ? `Nhập giá thầu`
+                        : `Giá thầu phải lớn hơn ${minBid} ${symbol}`
                     }
                   />
                 </div>
@@ -737,7 +759,7 @@ export const AuctionCard = ({
                     disabled={loading}
                     onClick={() => setShowPlaceBid(false)}
                   >
-                    Cancel
+                    Bỏ
                   </Button>
                   <Button
                     className="secondary-btn"
@@ -763,7 +785,7 @@ export const AuctionCard = ({
                     {loading || !accountByMint.get(QUOTE_MINT.toBase58()) ? (
                       <Spin />
                     ) : (
-                      'Bid now'
+                      'Đặt'
                     )}
                   </Button>
                 </div>
@@ -817,20 +839,19 @@ export const AuctionCard = ({
             onClick={connect}
             style={{ marginTop: 20 }}
           >
-            Connect wallet to{' '}
-            {auctionView.isInstantSale ? 'purchase' : 'place bid'}
+            Kết nối ví của bạn để {' '}
+            {auctionView.isInstantSale ? 'mua sản phẩm' : 'đấu giá'}
           </Button>
         )}
         {action}
         {showRedemptionIssue && (
           <span style={{ color: 'red' }}>
-            There was an issue redeeming or refunding your bid. Please try
-            again.
+            Đã xảy ra sự cố khi đổi hoặc hoàn trả giá thầu của bạn. Vui lòng thử lại.
           </span>
         )}
         {tickSizeInvalid && tickSize && (
           <span style={{ color: 'red' }}>
-            Tick size is ◎{tickSize.toNumber() / LAMPORTS_PER_MINT}.
+            Bước giá ◎{tickSize.toNumber() / LAMPORTS_PER_MINT}.
           </span>
         )}
         {gapBidInvalid && (
@@ -840,7 +861,7 @@ export const AuctionCard = ({
           </span>
         )}
         {!loading && value !== undefined && showPlaceBid && invalidBid && (
-          <span style={{ color: 'red' }}>Invalid amount</span>
+          <span style={{ color: 'red' }}>Số tiền không hợp lệ</span>
         )}
       </div>
 
@@ -853,7 +874,7 @@ export const AuctionCard = ({
             marginBottom: 20,
           }}
         >
-          Nice bid!
+          Giá thầu của bạn đã được ghi nhận
         </h1>
         <p
           style={{
@@ -862,11 +883,10 @@ export const AuctionCard = ({
             fontSize: '2rem',
           }}
         >
-          Your bid of ◎ {formatTokenAmount(lastBid?.amount, mintInfo)} was
-          successful
+          ◎ {formatTokenAmount(lastBid?.amount, mintInfo)}
         </p>
         <Button onClick={() => setShowBidPlaced(false)} className="overlay-btn">
-          Got it
+          Đóng
         </Button>
       </MetaplexOverlay>
 
@@ -879,7 +899,7 @@ export const AuctionCard = ({
             marginBottom: 20,
           }}
         >
-          Congratulations
+          Xin chúc mừng!
         </h1>
         <p
           style={{
@@ -888,14 +908,14 @@ export const AuctionCard = ({
             fontSize: '2rem',
           }}
         >
-          Your sale has been ended please view your NFTs in{' '}
-          <Link to="/artworks">My Items</Link>.
+          Chương trình giảm giá của bạn đã kết thúc, vui lòng xem NFT của bạn trong{' '}
+          <Link to="/artworks">kho lưu trữ</Link>.
         </p>
         <Button
           onClick={() => setShowEndingBidModal(false)}
           className="overlay-btn"
         >
-          Got it
+          Đóng
         </Button>
       </MetaplexOverlay>
 
@@ -925,7 +945,7 @@ export const AuctionCard = ({
           onClick={() => setShowRedeemedBidModal(false)}
           className="overlay-btn"
         >
-          Got it
+          Đóng
         </Button>
       </MetaplexOverlay>
 
@@ -937,12 +957,7 @@ export const AuctionCard = ({
         }}
       >
         <h3 style={{ color: 'white' }}>
-          Warning: There may be some items in this auction that still are
-          required by the auction for printing bidders&apos; limited or open
-          edition NFTs. If you wish to withdraw them, you are agreeing to foot
-          the cost of up to an estimated ◎
-          <b>{(printingCost || 0) / LAMPORTS_PER_MINT}</b> plus transaction fees
-          to redeem their bids for them right now.
+          Thông báo: Bạn sẽ mất một khoản phí là ◎ {(printingCost || 0) / LAMPORTS_PER_MINT} để thực hiện việc trao đổi này.
         </h3>
       </MetaplexModal>
     </div >

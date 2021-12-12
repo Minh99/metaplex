@@ -27,6 +27,7 @@ import { TokenCircle } from '../Custom';
 const btnStyle: React.CSSProperties = {
   border: 'none',
   height: 40,
+  color:'white',
 };
 
 const btnStyleHide: React.CSSProperties = {
@@ -80,6 +81,7 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
               display: 'flex',
               flexDirection: 'column',
               textAlign: 'center',
+              
             }}
           >
             {canCreate && (
@@ -137,7 +139,7 @@ const AddFundsModal = (props: {
             fontWeight: 700,
           }}
         >
-          <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Balance</span>
+          <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Số dư trong ví</span>
           <span>
             {formatNumber.format(props.balance)}&nbsp;&nbsp;
             <span
@@ -266,7 +268,7 @@ export const CurrentUserBadge = (props: {
                     letterSpacing: '0.02em',
                   }}
                 >
-                  BALANCE
+                  Số dư trong ví
                 </h5>
                 <div
                   style={{
@@ -483,7 +485,7 @@ export const CurrentUserBadgeMobile = (props: {
         )}
       </div>
       <div className="balance-container">
-        <span className="balance-title">Balance</span>
+        <span className="balance-title">Số dư trong ví</span>
         <span>
           <span className="sol-img-wrapper">
             <img src="/sol.svg" width="10" />
@@ -509,7 +511,7 @@ export const CurrentUserBadgeMobile = (props: {
         />
       </div>
       <div className="actions-buttons">
-        <Button
+        {/* <Button
           className="secondary-btn"
           onClick={() => {
             props.closeModal ? props.closeModal() : null;
@@ -517,7 +519,7 @@ export const CurrentUserBadgeMobile = (props: {
           }}
         >
           Nhận Sol thử nghiệm
-        </Button>
+        </Button> */}
         <Button className="black-btn" onClick={disconnect}>
           Ngắt kết nối ví
         </Button>

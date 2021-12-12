@@ -98,12 +98,12 @@ export default function TokenDialog({
 
       <Col className={'dialog-header'}>
         <Typography style={{ paddingBottom: "16px", textAlign: 'center', textTransform: 'uppercase', fontWeight: 600 }}>
-          Select a token as your auction mint
+          Chọn loại thanh toán
         </Typography>
         <Input
           autoFocus
           className="input text-field"
-          placeholder="Search token mints"
+          placeholder="Tìm kiếm"
           allowClear
           value={tokenFilter}
           onChange={(e) => setTokenFilter(e.target.value)}
@@ -126,7 +126,7 @@ export default function TokenDialog({
         <Search
           enterButton="Go!"
           className="input search-text-field"
-          placeholder="Can't find your token? set it here!"
+          placeholder="Tìm kiếm loại tiền theo địa chỉ của bạn"
           allowClear
           size="large"
           onSearch={(e) => validateTokenMint(e)}

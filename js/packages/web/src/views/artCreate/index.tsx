@@ -939,10 +939,10 @@ const RoyaltiesStep = (props: {
       {[...fixedCreators, ...creators].length > 0 && (
         <Row>
           <label className="action-field" style={{ width: '100%' }}>
-            <span className="field-title">
-              - Chi phí bản quyền sẽ được chuyển toàn bộ cho người chế tạo sản phẩm ở lần bán đầu tiên.<br />
-              - Sau khi bán thành công sản phẩm này sẽ thuộc quyền sở hữu của người mua.<br />
-              - Người mua lại được sản phẩm này sẽ nắm quyền sở hữu của sản phẩm và nếu tiếp tục đem đi <br /> bán tiếp cũng không mất bất kỳ chi phí bản quyền nào từ người bán trước đó.
+            <span className="field-title" style={{ lineHeight: '2rem' }}>
+              - Khi tạo sản phẩm thành công, quyền sở hữu sẽ là của bạn.<br />
+              - Sản phẩm có thể được đưa lên Maketplace để rao bán hoặc có thể đưa đi đấu giá.<br />
+              - Sau khi bán thành công, bạn sẽ nhận được số tiền đã chuyển đổi và sản phẩm này sẽ thuộc quyền sở hữu của người mua.<br />&nbsp;&nbsp; Bạn sẽ chỉ còn định danh là người khởi tạo sản phẩm này và sẽ không có bất kỳ phát sinh phí bản quyền nào khi người sở hữu sau đưa đi bán.
             </span>
             {/* <RoyaltiesSplitter
               creators={[...fixedCreators, ...creators]}

@@ -14,6 +14,11 @@ import {
 import { ConnectButton } from '@oyster/common';
 
 const getDefaultLinkActions = (connected: boolean) => {
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const handleChange = event => {
+    setSearchTerm(event.target.value);
+  };
+  
   return [
     <Link to={`/`} key={'explore'}>
       <Button className="app-btn">Trang chủ</Button>
@@ -24,6 +29,18 @@ const getDefaultLinkActions = (connected: boolean) => {
     <Link to={`/artists`} key={'artists'}>
       <Button className="app-btn">Người Chế  Tạo</Button>
     </Link>,
+    <input
+      type="text"
+      placeholder="Nhập token sản phẩm"
+      value={searchTerm}
+      onChange={handleChange}
+      style={{color: 'black', fontSize: '1.4rem', lineHeight: '1.2rem', border: '1px solid gray', borderRadius: '5px', padding: '0 0 0 5px', width: '400px'}}
+    />,
+    <button style={{color: 'black', fontSize: '1.4rem', lineHeight: '1.2rem', border: '1px solid gray', borderRadius: '5px', padding: '5px 15px', width: 'fit-content', marginLeft: '1rem'}}> 
+      <Link to={`/art/${searchTerm}`} style={{color: 'black'}}>
+        Tìm kiếm 
+      </Link>
+    </button>
   ];
 };
 

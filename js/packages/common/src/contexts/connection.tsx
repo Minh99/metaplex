@@ -31,13 +31,13 @@ interface BlockhashAndFeeCalculator {
 }
 
 export type ENDPOINT_NAME =
-  | 'mainnet-beta'
-  | 'mainnet-beta-solana'
-  | 'mainnet-beta-serum'
-  | 'testnet'
+  // | 'mainnet-beta'
+  // | 'mainnet-beta-solana'
+  // | 'mainnet-beta-serum'
+  // | 'testnet'
   | 'devnet'
-  | 'localnet'
-  | 'lending';
+  // | 'localnet'
+  // | 'lending';
 
 type Endpoint = {
   name: ENDPOINT_NAME;
@@ -47,30 +47,30 @@ type Endpoint = {
 };
 
 export const ENDPOINTS: Array<Endpoint> = [
-  {
-    name: 'mainnet-beta',
-    label: 'mainnet-beta',
-    url: 'https://api.metaplex.solana.com/',
-    chainId: ChainId.MainnetBeta,
-  },
-  {
-    name: 'mainnet-beta-solana',
-    label: 'mainnet-beta (Solana)',
-    url: 'https://api.mainnet-beta.solana.com',
-    chainId: ChainId.MainnetBeta,
-  },
-  {
-    name: 'mainnet-beta-serum',
-    label: 'mainnet-beta (Serum)',
-    url: 'https://solana-api.projectserum.com/',
-    chainId: ChainId.MainnetBeta,
-  },
-  {
-    name: 'testnet',
-    label: 'testnet',
-    url: clusterApiUrl('testnet'),
-    chainId: ChainId.Testnet,
-  },
+  // {
+  //   name: 'mainnet-beta',
+  //   label: 'mainnet-beta',
+  //   url: 'https://api.metaplex.solana.com/',
+  //   chainId: ChainId.MainnetBeta,
+  // },
+  // {
+  //   name: 'mainnet-beta-solana',
+  //   label: 'mainnet-beta (Solana)',
+  //   url: 'https://api.mainnet-beta.solana.com',
+  //   chainId: ChainId.MainnetBeta,
+  // },
+  // {
+  //   name: 'mainnet-beta-serum',
+  //   label: 'mainnet-beta (Serum)',
+  //   url: 'https://solana-api.projectserum.com/',
+  //   chainId: ChainId.MainnetBeta,
+  // },
+  // {
+  //   name: 'testnet',
+  //   label: 'testnet',
+  //   url: clusterApiUrl('testnet'),
+  //   chainId: ChainId.Testnet,
+  // },
   {
     name: 'devnet',
     label: 'devnet',

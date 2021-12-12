@@ -88,7 +88,7 @@ export const AuctionNumbers = (props: {
               containerStyle={{
                 flexDirection: props.showAsRow ? ' row' : 'column',
               }}
-              title="Highest bid"
+              title="GIÁ CAO NHẤT HIỆN TẠI"
               tokenInfo = {tokenInfo}
               amount={formatTokenAmount(bids[0].info.lastBid, mintInfo)}
             />
@@ -127,27 +127,27 @@ const Countdown = ({ state }: { state?: CountdownState }) => {
         <Col>
           <div className="cd-number">
             {localState.days}
-            <span style={{ opacity: 0.5 }}>days</span>
+            <span style={{ opacity: 0.5, paddingLeft: '0.3rem' }}>Ngày</span>
           </div>
         </Col>
       )}
       <Col>
         <div className="cd-number">
           {localState.hours}
-          <span style={{ opacity: 0.5 }}>hours</span>
+          <span style={{ opacity: 0.5, paddingLeft: '0.3rem' }}>Giờ</span>
         </div>
       </Col>
       <Col>
         <div className="cd-number">
           {localState.minutes}
-          <span style={{ opacity: 0.5 }}>min</span>
+          <span style={{ opacity: 0.5, paddingLeft: '0.3rem' }}>Phút</span>
         </div>
       </Col>
       {!localState.days && (
         <Col>
           <div className="cd-number">
             {localState.seconds}
-            <span style={{ opacity: 0.5 }}>sec</span>
+            <span style={{ opacity: 0.5, paddingLeft: '0.3rem' }}>Giây</span>
           </div>
         </Col>
       )}
