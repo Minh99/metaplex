@@ -20,8 +20,11 @@ export const AppLayout = React.memo((props: any) => {
         <Layout id={'width-layout'}>
           <Content
             style={{
-              overflow: 'scroll',
-              marginTop: '5rem'
+              marginTop: '5rem',
+              marginLeft: 0,
+              marginRight: 0,
+              paddingLeft: 0,
+              paddingRight: 0
             }}
           >
             {props.children}

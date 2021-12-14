@@ -93,6 +93,7 @@ export const AuctionView = () => {
   const { ref, data } = useExtendedArt(auction?.thumbnail.metadata.pubkey);
   const creators = useCreators(auction);
   const { pullAuctionPage } = useMeta();
+  const wallet = useWallet();
   useEffect(() => {
     pullAuctionPage(id);
   }, []);
@@ -141,7 +142,14 @@ export const AuctionView = () => {
       />
     );
   });
+  // console.log(wallet.publicKey?.toBase58());
 
+  // console.log(creators[0].address);
+
+  var taker = auction?.auction?.info?.bidState?.bids[0]?.key;
+  // creators[0].address
+
+  
   if (width < 768) {
     return (
       <Row
@@ -243,7 +251,7 @@ export const AuctionView = () => {
         </Col>
         <Col className="auction-mobile-section" span={24}>
           <div className={'info-view'}>
-            <h6 className={'info-title'}>Xem thông tin</h6>
+            <h6 className={'info-title'} style={{ textAlign: 'center' }}>Xem thông tin</h6>
             <div style={{ display: 'flex' }}>
               <Button
                 className="tag"
@@ -327,26 +335,27 @@ export const AuctionView = () => {
             <Col span={12} md={16}>
               <div className={'info-container'}>
                 <div className={'info-component'}>
-                  <h6 className={'info-info'}>Người chế tạo</h6>
-                  <span>{<MetaAvatar creators={creators} />}</span>
-                  <Tooltip title="Sao chép địa chỉ">
-                    <div
-                      style={{
-                        fontWeight: 600,
-                        letterSpacing: '-0.02em',
-                        color: '#FFFFFF',
-                        display: 'flex',
-                        marginTop: '1rem',
-                      }}
-                      onClick={() =>
-                        navigator.clipboard.writeText(creators[0]?.address || '')
-                      }
-                    >
-                      <CopyOutlined />
-                      &nbsp;{ creators[0]?.address ? shortenAddress(creators[0]?.address) : "" }
-                    </div>
-                  </Tooltip>
-                  
+                  <h6 className={'info-info'}>Tác giả</h6>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <span>{<MetaAvatar creators={creators} />}</span>
+                    <Tooltip title="Sao chép địa chỉ">
+                      <div
+                        style={{
+                          fontWeight: 600,
+                          letterSpacing: '-0.02em',
+                          color: '#FFFFFF',
+                          display: 'flex',
+                          marginTop: '1rem',
+                        }}
+                        onClick={() =>
+                          navigator.clipboard.writeText(creators[0]?.address || '')
+                        }
+                      >
+                        <CopyOutlined />
+                        &nbsp;{creators[0]?.address ? shortenAddress(creators[0]?.address) : ""}
+                      </div>
+                    </Tooltip>
+                  </div>
                 </div>
                 <div className={'info-component'}>
                   <h6 className={'info-info'}>Phiên bản </h6>
@@ -368,13 +377,15 @@ export const AuctionView = () => {
                 </div>
                 <div className={'info-component'}>
                   <h6 className={'info-info'}>Phương thức thanh toán</h6>
-                  <span>
-                    {nftCount === undefined ? (
-                      <Skeleton paragraph={{ rows: 0 }} />
-                    ) : (
-                      `${tokenInfo?.name || 'Custom Token'} ($${tokenInfo?.symbol || 'CUSTOM'
-                      })`
-                    )}
+                  <div style={{ display: 'flex' }}>
+                    <span>
+                      {nftCount === undefined ? (
+                        <Skeleton paragraph={{ rows: 0 }} />
+                      ) : (
+                        `${tokenInfo?.name || 'Custom Token'} ($${tokenInfo?.symbol || 'CUSTOM'
+                        })`
+                      )}
+                    </span>
                     <ClickToCopy
                       className="copy-pubkey"
                       copyText={
@@ -383,14 +394,14 @@ export const AuctionView = () => {
                           : auction?.auction.info.tokenMint || ''
                       }
                     />
-                  </span>
+                  </div>
                 </div>
               </div>
             </Col>
-            <Col span={12} md={8} className="view-on-container">
+            <Col span={12} md={8} className="view-on-container" style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)', display: 'flex', alignItems: 'center' }}>
               <div className="info-view-container">
                 <div className="info-view">
-                  <h6 className="info-title">Xem thông tin</h6>
+                  <h6 className="info-title" style={{ textAlign: 'center', marginBottom: '2rem' }}>Xem thông tin</h6>
                   <div style={{ display: 'flex' }}>
                     <Button
                       className="tag"
@@ -424,7 +435,9 @@ export const AuctionView = () => {
           {auction && (
             <AuctionCard auctionView={auction} hideDefaultAction={false} />
           )}
-          {!auction?.isInstantSale && <AuctionBids auctionView={auction} />}
+          { <AuctionBids auctionView={auction} />}
+          {/* {!auction?.isInstantSale && <AuctionBids auctionView={auction} />} */}
+
         </Col>
       </Row>
     );
@@ -564,13 +577,13 @@ const BidLine = (props: {
         </Col>
         <Col span={8} style={{ opacity: 0.7 }}>
           {format(bid.info.lastBidTimestamp.toNumber() * 1000).replace(/days ago|day ago|hour ago|hours ago|minute ago|minutes ago|second ago|seconds ago/, function (x) {
-            if (x == "days ago" ||  x == "day ago") {
+            if (x == "days ago" || x == "day ago") {
               return "ngày trước";
             } if (x == "hours ago" || x == "hour ago") {
               return "giờ trước";
-            }if (x == "minutes ago" || x == "minute ago") {
+            } if (x == "minutes ago" || x == "minute ago") {
               return "phút trước";
-            }else{
+            } else {
               return "giây trước";
             }
           })}
@@ -625,7 +638,7 @@ export const AuctionBids = ({
 
   const mint = useMint(auctionView?.auction.info.tokenMint);
   const { width } = useWindowDimensions();
-
+  const wallet = useWallet();
   const [showHistoryModal, setShowHistoryModal] = useState<boolean>(false);
 
   const winnersCount = auctionView?.auction.info.bidState.max.toNumber() || 0;
@@ -668,8 +681,27 @@ export const AuctionBids = ({
 
   return (
     <Row>
-      <Col className="bids-lists">
-        <h6 className={'info-title'}>Lịch sử đấu giá</h6>
+      <Col className="bids-lists" style={{ marginTop: '2rem' }}>
+        {auctionView.isInstantSale ?
+            <>
+              <h6 style={{ wordSpacing: '3px', marginTop: '2rem' }} className={'info-title'}> 
+               { auctionView.auction.info.bidState.bids[0]?.key === wallet.publicKey?.toBase58() ? 
+                  "Bạn đã mua sản phẩm này" : 
+                  auctionView.auctionManager.authority === wallet.publicKey?.toBase58() ? 
+                    auctionView.auction.info.state !== 1 ? "Sản phẩm đã được bán" : "Đã có người muốn mua sản phẩm này" :
+                    "Đã có người mua sản phẩm này"
+               }
+               </h6>
+              {
+                auctionView.auctionManager.authority === wallet.publicKey?.toBase58() ?
+                <span>{ auctionView.auction.info.state == 1 && "Vui lòng đợi người mua xác nhận!"} </span> :
+                <span></span>
+              }
+            </>
+          :
+          <h6 style={{ wordSpacing: '3px' }} className={'info-title'}> Lịch sử đấu giá </h6>
+        }
+
         {bidLines.slice(0, 10)}
         {bids.length > 10 && (
           <div

@@ -73,12 +73,14 @@ export const AuctionNumbers = (props: {
             <AmountLabel
               displaySymbol={tokenInfo?.symbol || "CUSTOM"}
               style={{ marginBottom: props.showAsRow ? 0 : 10 }}
-              title={auctionView.isInstantSale ? 'Price' : 'Starting bid'}
+              title={auctionView.isInstantSale ? 'Giá' : 'Giá khởi điểm'}
               tokenInfo = {tokenInfo}
               amount={fromLamports(
                 participationOnly ? participationFixedPrice : priceFloor,
                 mintInfo,
               )}
+              width='55px'
+              height='55px'
             />
           )}
           {!auctionView.isInstantSale && isStarted && bids.length > 0 && (
@@ -91,6 +93,8 @@ export const AuctionNumbers = (props: {
               title="GIÁ CAO NHẤT HIỆN TẠI"
               tokenInfo = {tokenInfo}
               amount={formatTokenAmount(bids[0].info.lastBid, mintInfo)}
+              width='55px'
+              height='55px'
             />
           )}
         </>

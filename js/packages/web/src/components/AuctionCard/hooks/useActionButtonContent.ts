@@ -10,15 +10,15 @@ export const useActionButtonContent = (auctionView: AuctionView): string => {
   } = useInstantSaleState(auctionView);
 
   if (!isInstantSale) {
-    return 'Place Bid';
+    return 'Đặt giá thầu';
   }
 
   if (canClaimPurchasedItem) {
-    return 'Claim Purchase';
+    return 'Yêu cầu mua';
   }
 
   if (canClaimItem) {
-    return 'Claim item';
+    return 'Yêu cầu mặt hàng';
   }
 
   if (canEndInstantSale) {

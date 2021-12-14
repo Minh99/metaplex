@@ -10,16 +10,17 @@ export const ViewOn = ({ id }: { id: string }) => {
   return (
     <>
       <Col>
-        <h6>Xem thông tin</h6>
-        <div style={{ display: 'flex' }}>
+        <h6 style={{textAlign: 'left'}}>Xem thông tin</h6>
+        <div style={{ display: 'flex'}}>
           <Button
-            className="tag"
+            style={{ color:'red', margin: 0, padding: 0 }}
+            className="tag btn-info"
             onClick={() => window.open(art.uri || '', '_blank')}
           >
             Arweave
           </Button>
           <Button
-            className="tag"
+            className="tag btn-info"
             onClick={() => {
               const cluster = endpoint.name;
               const explorerURL = new URL(

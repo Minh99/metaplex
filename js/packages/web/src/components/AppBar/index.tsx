@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Menu, Modal } from 'antd';
+import { Button, Menu, Modal, Input } from 'antd';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Notifications } from '../Notifications';
 import useWindowDimensions from '../../utils/layout';
@@ -29,18 +29,18 @@ const getDefaultLinkActions = (connected: boolean) => {
     <Link to={`/artists`} key={'artists'}>
       <Button className="app-btn">Người Chế  Tạo</Button>
     </Link>,
-    <input
+    <Input
       type="text"
       placeholder="Nhập token sản phẩm"
       value={searchTerm}
       onChange={handleChange}
-      style={{color: 'black', fontSize: '1.4rem', lineHeight: '1.2rem', border: '1px solid gray', borderRadius: '5px', padding: '0 0 0 5px', width: '400px'}}
+      style={{ backgroundColor: 'white', color: 'black', fontSize: '1.4rem', lineHeight: '1.2rem', border: '1px solid gray', borderRadius: '5px', padding: '0 0 0 5px', width: '400px', marginLeft: '2rem'}}
     />,
-    <button style={{color: 'black', fontSize: '1.4rem', lineHeight: '1.2rem', border: '1px solid gray', borderRadius: '5px', padding: '5px 15px', width: 'fit-content', marginLeft: '1rem'}}> 
+    <Button style={{color: 'black', fontSize: '1.4rem', lineHeight: '1.2rem', border: '1px solid gray', borderRadius: '5px', padding: '5px 15px', width: 'fit-content', marginLeft: '1rem'}}> 
       <Link to={`/art/${searchTerm}`} style={{color: 'black'}}>
         Tìm kiếm 
       </Link>
-    </button>
+    </Button>
   ];
 };
 
@@ -127,7 +127,7 @@ const MetaplexMenu = () => {
 export const LogoLink = () => {
   return (
     <Link to={`/`}>
-      <h1 style={{color:'black', margin:'0', fontSize: '42px'}}>MVD</h1> 
+      <h1 style={{color:'black', margin:'0', fontSize: '42px', marginRight:'2rem'}}>MVD</h1> 
     </Link>
   );
 };

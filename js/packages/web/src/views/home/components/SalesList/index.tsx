@@ -36,13 +36,13 @@ export const SalesListView = () => {
 
   return (
     <>
-      {/* <Banner
-        src="/main-banner.svg"
-        headingText="The amazing world of Metaplex."
-        subHeadingText="Buy exclusive Metaplex NFTs."
-        actionComponent={<HowToBuyModal buttonClassName="secondary-btn" />}
+      <Banner
+        src="https://santhemes.com/blackgallery/digikon-nfts/images/banner1.jpg"
+        headingText="Sàn đấu giá NFT"
+        subHeadingText="Mua bán NFTs độc quyền."
+        actionComponent={<HowToBuyModal buttonClassName="button-header" />}
         useBannerBg
-      /> */}
+      />
       <Layout>
         <Content style={{ display: 'flex', flexWrap: 'wrap' }}>
           <Col style={{ width: '100%', marginTop: 32 }}>

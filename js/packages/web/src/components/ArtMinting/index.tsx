@@ -145,7 +145,7 @@ export const ArtMinting = ({ id, onMint }: ArtMintingProps) => {
             type="primary"
             size="large"
             className="action-btn"
-            style={{ marginTop: 20 }}
+            style={{ marginTop: 20, display: 'none' }}
             onClick={() => setShowMintModal(true)}
           >
             Mint

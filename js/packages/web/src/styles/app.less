@@ -167,6 +167,8 @@ code {
   cursor: pointer;
   margin-left: 10px;
   color: white;
+  display: flex;
+  margin: auto 0  auto  10px;
   :hover {
     color: @metaplex-primary-color;
   }
@@ -250,6 +252,14 @@ h1 {
   line-height: 16px;
   background-color: transparent !important;
   color: rgb(0, 0, 0);
+  &.button-header {
+    color: #fd0bff;
+    border: transparent !important;
+    padding: 0;
+    font-size: 1rem;
+    opacity: 0.5;
+    width: fit-content;
+  }
   &.secondary-btn {
     color: @black-100;
     background: @metaplex-primary-color !important;
@@ -257,7 +267,6 @@ h1 {
     box-shadow: 0px 0px 24px rgba(26, 26, 26, 0.12);
     border-radius: 8px;
     width: fit-content;
-
     &:hover,
     &:focus {
       background: transparent !important;
@@ -329,4 +338,31 @@ model-viewer {
   .my-masonry-grid_column > div {
     margin-bottom: 15px; /* space between items */
   }
+}
+.Search-ac{
+  .ant-input{
+  background-color: rgb(255, 255, 255) !important;
+  border: 1px solid rgb(78, 78, 78) !important;
+  color: #1a1a1a !important;
+  height: 32px !important;
+  display: flex;
+  margin: auto !important;
+
+  }
+  .ant-input-group-addon{
+    .ant-btn .ant-btn-primary .ant-input-search-button{
+      display: flex;
+      margin: auto;
+
+      .anticon .anticon-search{
+        display: flex;
+        margin: auto;
+        background-color: red !important;
+      }
+    }
+  }
+  
+}
+.tag{
+  color:#768bf9 !important;
 }

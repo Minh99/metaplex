@@ -49,7 +49,8 @@ export const ArtView = () => {
     suppLy = ` ${art.supply}`;
   }
   const { ref, data } = useExtendedArt(id);
-
+  console.log(art);
+  
   // const { userAccounts } = useUserAccounts();
 
   // const accountByMint = userAccounts.reduce((prev, acc) => {
@@ -109,25 +110,15 @@ export const ArtView = () => {
             style={{ textAlign: 'left', fontSize: '2rem' }}
           >
             <Row>
-              <div style={{ fontWeight: 700, fontSize: '3rem' }}>
-                {art.title || <Skeleton paragraph={{ rows: 0 }} />}
-              </div>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <h6>Phí Bản Quyền</h6>
-                <div className="royalties">
-                  {((art.seller_fee_basis_points || 0)).toFixed(2)}%
+                <div style={{ fontWeight: 700, fontSize: '3rem' }}>
+                  {art.title || <Skeleton paragraph={{ rows: 0 }} />}
                 </div>
-              </Col>
-              <Col span={12}>
-                <ViewOn id={id} />
-              </Col>
             </Row>
+            <hr style={{ width: '50%', margin: 'initial', border:'1px solid #888888' , marginBottom: '1rem', marginTop: '1rem' }} />
             <Row>
-              <Col>
-                <h6 style={{ marginTop: 5 }}>Người Chế Tạo</h6>
-                <div className="creators">
+              <Col span={12}>
+                <h6 style={{ marginTop: 5 }}>Tác giả</h6>
+                <div className="creators art-edition">
                   {(art.creators || []).map((creator, idx) => {
                     return (
                       <div
@@ -175,17 +166,34 @@ export const ArtView = () => {
                 </div>
               </Col>
             </Row>
+            <hr style={{ width: '50%', margin: 'initial', border:'1px solid #888888' , marginBottom: '1rem', marginTop: '1rem' }} />
             <Row>
-              <Col>
-                <div style={{ display: 'flex', justifyContent: 'flex-start', justifyItems: 'center', marginTop: 5, tabSize: 4 }}>
-                  <h6>Phiên bản (Edition):  &nbsp;</h6>
-                  <div className="art-edition">{badge}</div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'flex-start', justifyItems: 'center', marginTop: 5, tabSize: 4 }}>
-                  <h6>Tổng cung (supply):  &nbsp;</h6>
-                  <div className="art-edition">{maxSupply}</div>
+              <Col span={12}>
+                <div style={{display: 'flex'}}>
+                  <h6>Phí bản quyền : &nbsp;</h6>
+                  <span className="royalties art-edition" style={{ color: 'white' }}>{((art.seller_fee_basis_points || 0)/10 ).toFixed(2)}%</span>
                 </div>
               </Col>
+              {/* <Col span={12}> */}
+              {/* </Col> */}
+            </Row>
+            <hr style={{ width: '50%', margin: 'initial', border:'1px solid #888888', marginBottom: '1rem', marginTop: '1rem' }} />
+            <Row>
+              <Col span={12}>
+                <div style={{ display: 'flex', justifyContent: 'flex-start', justifyItems: 'center', marginTop: 5, tabSize: 4 }}>
+                  <h6>Phiên bản :  &nbsp;</h6>
+                  <div className="art-edition">{badge}</div>
+                </div>
+                <hr style={{ margin: 'initial', border:'1px solid #888888' , marginBottom: '1rem', marginTop: '1rem'  }} />
+                <div style={{ display: 'flex', justifyContent: 'flex-start', justifyItems: 'center', marginTop: 5, tabSize: 4 }}>
+                  <h6>Tổng cung :  &nbsp;</h6>
+                  <div className="art-edition">{maxSupply || 1} NFT</div>
+                </div>
+              </Col>
+            </Row>
+            <hr style={{ width: '50%', margin: 'initial', border:'1px solid #888888' , marginBottom: '1rem', marginTop: '1rem' }} />
+            <Row>
+              <ViewOn id={id} />
             </Row>
             {/* {art.type === ArtType.Master && (
               <Row>

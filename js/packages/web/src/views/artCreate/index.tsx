@@ -929,7 +929,7 @@ const RoyaltiesStep = (props: {
             onChange={(val: number) => {
               props.setAttributes({
                 ...props.attributes,
-                seller_fee_basis_points: 1 * 100,
+                seller_fee_basis_points: 10 * 100,
               });
             }}
             className="royalties-input"
@@ -942,7 +942,8 @@ const RoyaltiesStep = (props: {
             <span className="field-title" style={{ lineHeight: '2rem' }}>
               - Khi tạo sản phẩm thành công, quyền sở hữu sẽ là của bạn.<br />
               - Sản phẩm có thể được đưa lên Maketplace để rao bán hoặc có thể đưa đi đấu giá.<br />
-              - Sau khi bán thành công, bạn sẽ nhận được số tiền đã chuyển đổi và sản phẩm này sẽ thuộc quyền sở hữu của người mua.<br />&nbsp;&nbsp; Bạn sẽ chỉ còn định danh là người khởi tạo sản phẩm này và sẽ không có bất kỳ phát sinh phí bản quyền nào khi người sở hữu sau đưa đi bán.
+              - Sau khi bán thành công, bạn sẽ nhận được số tiền đã chuyển đổi và sản phẩm này sẽ thuộc quyền sở hữu của người mua.<br />&nbsp;&nbsp; 
+              Bạn sẽ chỉ còn định danh là người khởi tạo sản phẩm này và sẽ nhận được 10% tiền bản quyền nếu sản phẩm được đem đi bán thành công ở những lần sau đó khi người sở hữu sau đưa đi bán.
             </span>
             {/* <RoyaltiesSplitter
               creators={[...fixedCreators, ...creators]}
@@ -1117,7 +1118,7 @@ const LaunchStep = (props: {
           <Statistic
             className="create-statistic"
             title="Phí bản quyền nhận được"
-            value={props.attributes.seller_fee_basis_points}
+            value={props.attributes.seller_fee_basis_points / 10}
             precision={2}
             suffix="%"
           />

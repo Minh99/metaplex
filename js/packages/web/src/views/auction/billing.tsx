@@ -444,8 +444,8 @@ export const InnerBillingView = ({
                 mint,
               )}
             </div> */}
-            <div className="info-header">
-              Số  Sol người chế tạo nhận được
+            {/* <div className="info-header">
+              Số  Sol tác giả nhận được
             </div>
             <div className="escrow">
               {auctionView.auctionManager.acceptPayment == WRAPPED_SOL_MINT.toBase58()? "◎": ""}
@@ -456,7 +456,7 @@ export const InnerBillingView = ({
                 ),
                 mint,
               )}
-            </div>
+            </div> */}
             {/* <div className="info-header">TOTAL UNSETTLED</div>
             <div className="escrow">
               {auctionView.auctionManager.acceptPayment == WRAPPED_SOL_MINT.toBase58()? "◎": ""}
@@ -468,7 +468,7 @@ export const InnerBillingView = ({
                 mint,
               )}
             </div> */}
-            <div className="info-header">Số Sol chưa hoàn trả người thua cuộc</div>
+            <div className="info-header">Số Sol chưa hoàn trả</div>
             <div className="escrow">
               {escrowBalance !== undefined ? `${auctionView.auction.info.tokenMint == WRAPPED_SOL_MINT.toBase58()? "◎": ""} ${escrowBalance}` : <Spin />}
             </div>
@@ -488,7 +488,7 @@ export const InnerBillingView = ({
               type="primary"
               size="large"
               className="action-btn"
-              disabled={auctionView.auctionManager.authority !== wallet.publicKey?.toBase58()}
+              disabled={auctionView.auctionManager.authority !== wallet.publicKey?.toBase58()}//</Col> || auctionView.auctionManager?.status === 3 }
               onClick={async () => {
                 await settle(
                   connection,
@@ -501,7 +501,12 @@ export const InnerBillingView = ({
                 setEscrowBalanceRefreshCounter(ctr => ctr + 1);
               }}
             >
-              Rút tiền về ví
+              {
+                // auctionView.auctionManager?.status === 3 ?
+                // "Đã rút về ví thành công"
+                // :
+                "Rút tiền về ví"
+              }
             </Button>
           </Col>
         </Row>

@@ -15,23 +15,23 @@ export const HowToBuyModal: React.FC<HowToBuyModalProps> = ({
   return (
     <InstructionsModal
       buttonClassName={buttonClassName}
-      buttonText="How to Buy"
-      modalTitle={`Buying NFTs on ${LABELS.STORE_NAME}`}
+      buttonText="Xem cách sử dụng"
+      modalTitle={`Mua NFT như thế nào?`}
       cardProps={[
         {
-          title: 'Create a SOL wallet',
+          title: 'Tạo ví SOL',
           imgSrc: '/modals/how-to-buy-1.svg',
-          description: `SOL is the cryptocurrency we use for purchases on ${LABELS.STORE_NAME}. To keep your SOL safe, you’ll need a crypto wallet—we recommend using one called Phantom. Just head to Phantom’s site, install the Chrome extension, and create an account.`,
+          description: `SOL là tiền điện tử mà chúng tôi sử dụng để mua hàng trên nền tảng Solana. Để giữ SOL của bạn an toàn, bạn sẽ cần một ví tiền điện tử — chúng tôi khuyên bạn nên sử dụng một ví có tên là Phantom. Chỉ cần truy cập trang web của Phantom, cài đặt tiện ích mở rộng Chrome và tạo tài khoản..`,
         },
         {
-          title: 'Add funds to your wallet',
+          title: 'Nạp tiền vào ví của bạn',
           imgSrc: '/modals/how-to-buy-2.svg',
-          description: `To fund your wallet, you’ll need to purchase SOL tokens. The easiest way is with a credit card on FTX Pay—a service that’s already part of your new Phantom wallet. Open your wallet, tap “Deposit SOL”, and select “Deposit from FTX”. A new window will open where you can create an FTX account and purchase SOL.`,
+          description: `Để nạp tiền vào ví của bạn, bạn sẽ cần mua SOL. Cách dễ nhất là sử dụng thẻ tín dụng trên FTX Pay — một dịch vụ đã là một phần của ví Phantom mới của bạn. Mở ví của bạn, chạm vào “Gửi tiền SOL” và chọn “Gửi tiền từ FTX”. Một cửa sổ mới sẽ mở ra, nơi bạn có thể tạo tài khoản FTX và mua SOL.`,
         },
         {
-          title: `Connect your wallet to ${LABELS.STORE_NAME}.`,
+          title: `Kết nối ví của bạn`,
           imgSrc: '/modals/how-to-buy-3.jpg',
-          description: `To connect your wallet, tap “Connect Wallet” here on the site. Select the Phantom option, and your wallet will connect. After that, you can start bidding on NFTs.`,
+          description: `Để kết nối ví của bạn, hãy nhấn vào “Connect Wallet” tại đây trên trang web. Chọn tùy chọn Phantom và ví của bạn sẽ kết nối. Sau đó, bạn có thể bắt đầu tham gia các hoạt động của chúng tôi đã cung cấp.`,
           endElement: <ConnectButton className={'secondary-btn'} />,
         },
       ]}

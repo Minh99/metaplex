@@ -7,6 +7,8 @@ import { isAuction } from '../../utils';
 import PackCard from '../PackCard';
 
 const SaleCard = ({ sale }: { sale: Sale }): ReactElement => {
+  // console.log(sale);
+  
   if (isAuction(sale)) {
     const { pubkey } = sale.auction;
 

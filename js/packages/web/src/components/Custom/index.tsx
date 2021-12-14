@@ -1,15 +1,16 @@
 import React, { CSSProperties } from 'react';
 
-export const TokenCircle = (props: { iconSize?: number , iconFile?: string, style?:CSSProperties}) => {
-  const { iconSize = 24 ,iconFile=undefined, style={}} = props;
+export const TokenCircle = (props: { iconSize?: number , iconFile?: string, style?:CSSProperties , width?: string, height?: string}) => {
+  const { width =undefined, height=undefined, iconSize = 24 ,iconFile=undefined, style={}} = props;
   const filePath = iconFile? iconFile:"/unknown_token.png"
+  
   return (
     <span
       style={{
         background: 'rgba(255, 255, 255, 0.05)',
         borderRadius: '50%',
-        height: iconSize,
-        width: iconSize,
+        height: width !== undefined ? width : iconSize,
+        width: height !== undefined ? height : iconSize,
         display: 'inline-flex',
         overflow: 'hidden',
         ...style

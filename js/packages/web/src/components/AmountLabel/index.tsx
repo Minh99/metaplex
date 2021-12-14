@@ -16,6 +16,8 @@ interface IAmountLabel {
   customPrefix?: JSX.Element;
   ended?: boolean;
   tokenInfo?: TokenInfo;
+  width?: string,
+  height?: string
 }
 
 export const AmountLabel = (props: IAmountLabel) => {
@@ -29,7 +31,9 @@ export const AmountLabel = (props: IAmountLabel) => {
     iconSize = 38,
     customPrefix,
     ended,
-    tokenInfo
+    tokenInfo,
+    width = undefined,
+    height = undefined
   } = props;
   // Add formattedAmount to be able to parse USD value and retain abbreviation of value
   const amount = typeof _amount === 'string' ? parseFloat(_amount) : _amount;
@@ -37,10 +41,10 @@ export const AmountLabel = (props: IAmountLabel) => {
   if (amount >= 1) {
     formattedAmount = formatAmount(amount);
   }
-
+  
   const solPrice = useSolPrice();
-  const altSplPrice = useAllSplPrices().filter(a=>a.tokenMint == tokenInfo?.address)[0]?.tokenPrice
-  const tokenPrice = tokenInfo?.address == WRAPPED_SOL_MINT.toBase58()? solPrice: altSplPrice
+  const altSplPrice = useAllSplPrices().filter(a => a.tokenMint == tokenInfo?.address)[0]?.tokenPrice
+  const tokenPrice = tokenInfo?.address == WRAPPED_SOL_MINT.toBase58() ? solPrice : altSplPrice
 
   const [priceUSD, setPriceUSD] = useState<number | undefined>(undefined);
 
@@ -51,25 +55,36 @@ export const AmountLabel = (props: IAmountLabel) => {
   const PriceNaN = isNaN(amount);
 
   return (
-    <div style={{ display: 'flex', ...containerStyle }}>
+    <div style={{ display: 'flex', ...containerStyle, flexDirection: 'column' }}>
       {PriceNaN === false && (
-        <Statistic
-          style={style}
-          className="create-statistic"
-          title={title || ''}
-          value={`${formattedAmount} ${displaySymbol || ''}`}
-          prefix={customPrefix || <TokenCircle iconSize={iconSize} iconFile={tokenInfo?.logoURI==""? undefined: tokenInfo?.logoURI}/>}
-        />
+        <>
+          <Statistic
+            style={style}
+            className="create-statistic"
+            title={title || ''}
+            value={`${formattedAmount} ${displaySymbol || ''}`}
+            prefix={customPrefix || <TokenCircle width={width} height={height} iconSize={iconSize} iconFile={tokenInfo?.logoURI == "" ? undefined : tokenInfo?.logoURI} />}
+          >
+          </Statistic>
+          
+          {displayUSD && (
+            PriceNaN === false ? (
+              <span className='usd'> {priceUSD ? formatUSD.format(priceUSD) : "$N/A"} </span>
+            ) : (
+              <div className="placebid">{ended ? 'N/A' : 'Đặt giá thầu'}</div>
+            )
+          )}
+        </>
       )}
-      {displayUSD && (
+      {/* {displayUSD && (
         <div className="usd">
           {PriceNaN === false ? (
-            priceUSD? formatUSD.format(priceUSD): "$N/A"
+            priceUSD ? formatUSD.format(priceUSD) : "$N/A"
           ) : (
             <div className="placebid">{ended ? 'N/A' : 'Đặt giá thầu'}</div>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

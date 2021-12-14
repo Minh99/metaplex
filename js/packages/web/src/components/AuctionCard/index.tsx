@@ -326,10 +326,10 @@ export const AuctionCard = ({
     if (wallet.connected) {
       if (wallet.publicKey && !showPlaceBid) setShowPlaceBid(true);
 
-      if (auctionView.auction.info.bidState.bids.length > 0) {
+      if (auctionView?.auction?.info?.bidState?.bids?.length > 0) {
         for (let index = 0; index < auctionView.auction.info.bidState.bids.length; index++) {
-          const element = auctionView.auction.info.bidState.bids[index];
-          if (element.key === wallet?.publicKey?.toBase58()) {
+          const element = auctionView?.auction?.info?.bidState?.bids[index];
+          if (element?.key === wallet?.publicKey?.toBase58()) {
             setIsContain(true);
           }
         }
@@ -498,7 +498,7 @@ export const AuctionCard = ({
     return <></>;
   }
   console.log(auctionView.auction.info);
-  console.log(minBid + " : " + balance.balance);
+  // console.log(priceFloor + " : " + balance.balance);
   
   return (
     <div className="auction-container" style={style}>
@@ -617,10 +617,10 @@ export const AuctionCard = ({
                   `${wallet?.publicKey &&
                     auctionView.auctionManager.authority !==
                     wallet.publicKey.toBase58()
-                    ? 'Nhận lại Sol'
+                    ? 'Thu hồi lại Sol'
                     : 
                     auctionView.auction.info.bidState.bids.length === 0 ?
-                    'Lấy lại sản phẩm' :
+                    'Thu hồi lại sản phẩm' :
                     ''
                   }`
                 )}
@@ -630,7 +630,7 @@ export const AuctionCard = ({
             (
               <div className="show-place-bid">
                 <AmountLabel
-                  title={(minBid >= balance.balance && minBid < 9999999) ? "Số Sol hiện tại không đủ" :  "Số Sol hiện tại"}
+                  title={((minBid >= balance.balance && minBid < 9999999) || (auctionView.auction?.info?.priceFloor?.minPrice?.toNumber() || 0) / LAMPORTS_PER_SOL > balance.balance) ? "Số Sol hiện tại không đủ" :  "Số Sol hiện tại"}
                   displaySymbol={tokenInfo?.symbol || 'CUSTOM'}
                   style={{ marginBottom: 0 }}
                   amount={balance.balance}
@@ -669,12 +669,14 @@ export const AuctionCard = ({
                       }}
                       style={{ marginTop: 20 }}
                     >
-                      {loading ? <Spin /> : 'Start auction'}
+                      {loading ? <Spin /> : 'Bắt đầu'}
                     </Button>
                   ) : (
                     !showPlaceBid && (
                       <Button
+                        style={{ marginLeft: '1rem' }}
                         className="secondary-btn"
+                        disabled={(minBid >= balance.balance && minBid < 9999999)}
                         onClick={() => {
                           if (wallet.connected) setShowPlaceBid(true);
                           else connect();
@@ -763,7 +765,7 @@ export const AuctionCard = ({
                   </Button>
                   <Button
                     className="secondary-btn"
-                    disabled={invalidBid}
+                    disabled={invalidBid || (minBid >= balance.balance && minBid < 9999999)}
                     onClick={async () => {
                       setLoading(true);
                       if (myPayingAccount && value) {
@@ -812,23 +814,49 @@ export const AuctionCard = ({
               }}
               style={{ marginTop: 20 }}
             >
-              {loading ? <Spin /> : 'Start auction'}
+              {loading ? <Spin /> : 'Bắt đầu'}
             </Button>
           ) : loading ? (
             <Spin />
           ) : (
             auctionView.isInstantSale &&
             !isAlreadyBought && !purchaseFinished && (
+              auctionView.auction.info.state === 1 ?
               <Button
                 type="primary"
                 size="large"
                 className="ant-btn secondary-btn"
-                disabled={loading}
+                disabled={
+                  loading ||
+                  (
+                    auctionView?.auction?.info?.bidState?.bids.length > 0 &&
+                    auctionView?.auction?.info?.bidState?.bids[0]?.key !== wallet.publicKey?.toBase58() && 
+                    auctionView?.auctionManager?.authority !== wallet.publicKey?.toBase58()
+                  ) ||
+                  (
+                    auctionView?.auctionManager?.authority !== wallet.publicKey?.toBase58() &&
+                    auctionView.auction.info.ended()
+                  ) ||
+                  (
+                    (auctionView.auction?.info?.priceFloor?.minPrice?.toNumber() || 0) / LAMPORTS_PER_SOL > balance.balance &&
+                    auctionView.auctionManager.authority !== wallet.publicKey?.toBase58()
+                  )
+                }
                 onClick={instantSaleAction}
                 style={{ marginTop: 20, width: '100%' }}
               >
                 {actionButtonContent}
-              </Button>
+
+              </Button> :
+              auctionView.auctionManager.authority === wallet.publicKey?.toBase58() ?
+              <Button 
+                type="primary"
+                size="large"
+                className="ant-btn secondary-btn"
+                style={{ marginTop: 20, width: '100%' }}
+              >
+                <Link to={`/auction/${auctionView.auction.pubkey}/billing`}>Chuyển đến màn hình rút tiền</Link>
+              </Button> : <></>
             )
           ))}
         {!hideDefaultAction && !wallet.connected && (
