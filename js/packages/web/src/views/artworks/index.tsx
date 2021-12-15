@@ -110,10 +110,10 @@ export const ArtworksView = () => {
                   {artworkGrid}
                 </TabPane>
               )}
-              {connected && storeIndexer.length !== 0 && (
-                <a onClick={() => pullAllMetadata()}>Làm mới dữ liệu</a>
-              )}
             </Tabs>
+            {storeIndexer.length !== 0 && (
+              <a style={{ fontSize: '1.2rem', marginLeft: '1rem' }} onClick={() => pullAllMetadata()}>Làm mới dữ liệu</a>
+            )}
           </Row>
         </Col>
       </Content>

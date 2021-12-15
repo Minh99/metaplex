@@ -635,7 +635,6 @@ export const AuctionBids = ({
   auctionView?: Auction | null;
 }) => {
   const bids = useBidsForAuction(auctionView?.auction.pubkey || '');
-
   const mint = useMint(auctionView?.auction.info.tokenMint);
   const { width } = useWindowDimensions();
   const wallet = useWallet();
@@ -677,7 +676,6 @@ export const AuctionBids = ({
   }, [auctionState, bids, activeBidders]);
 
   if (!auctionView || bids.length < 1) return null;
-  // console.log(bidLines);
 
   return (
     <Row>

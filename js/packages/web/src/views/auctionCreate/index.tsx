@@ -60,6 +60,7 @@ import TokenDialog, { TokenButton } from '../../components/TokenDialog';
 import { useTokenList } from '../../contexts/tokenList';
 import { mintTo } from '@project-serum/serum/lib/token-instructions';
 import { TokenInfo } from '@solana/spl-token-registry';
+import { useCreator } from '../../hooks';
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -708,6 +709,8 @@ export const AuctionCreateView = () => {
 const CategoryStep = (props: {
   confirm: (category: AuctionCategory) => void;
 }) => {
+  const wallet = useWallet();
+  const creator = useCreator(wallet.publicKey?.toBase58());
   const { width } = useWindowDimensions();
   return (
     <>
@@ -758,20 +761,23 @@ const CategoryStep = (props: {
               </div>
             </Button>
           </Row> */}
-          <Row >
-            <Button
-              className="type-btn"
-              size="large"
-              onClick={() => props.confirm(AuctionCategory.Tiered)}
-            >
-              <div>
-                <div>Đấu giá</div>
-                <div className="type-btn-description">
-                  Người tham gia nhận được sản phẩm sau khi họ chiến thắng
+          { wallet.publicKey?.toBase58() === '7NZmfttG7CSCSs6tMiG5SvTgrVuYNoA4jjvK4haDqoYN' &&
+            <Row >
+              <Button
+                className="type-btn"
+                size="large"
+                onClick={() => props.confirm(AuctionCategory.Tiered)}
+              >
+                <div>
+                  <div>Đấu giá</div>
+                  <div className="type-btn-description">
+                    Người tham gia nhận được sản phẩm sau khi họ chiến thắng
+                  </div>
                 </div>
-              </div>
-            </Button>
-          </Row>
+              </Button>
+            </Row>
+          }
+
           {/* <Row>
             <Button
               className="type-btn"

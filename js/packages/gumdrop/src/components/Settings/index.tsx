@@ -48,13 +48,13 @@ export const Settings = ({ narrow } : { narrow : boolean }) => {
         if (publicKey) {
           await navigator.clipboard.writeText(publicKey.toBase58());
           notify({
-            message: "Wallet update",
-            description: "Address copied to clipboard",
+            message: "Kết nối ví",
+            description: "Đã sao chép địa chỉ vào khay nhớ tạm",
           });
         }
       },
       innerNarrow: () => (
-        `Copy Address (${publicKey && shortenAddress(publicKey.toBase58())})`
+        `Sao chép địa chỉ (${publicKey && shortenAddress(publicKey.toBase58())})`
       ),
       inner: function ConnectedWalletCopyC() {
         return (

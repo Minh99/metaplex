@@ -497,7 +497,7 @@ export const AuctionCard = ({
   if (shouldHide) {
     return <></>;
   }
-  console.log(auctionView.auction.info);
+  // console.log(auctionView.auction.info);
   // console.log(priceFloor + " : " + balance.balance);
   
   return (
@@ -913,7 +913,13 @@ export const AuctionCard = ({
         >
           ◎ {formatTokenAmount(lastBid?.amount, mintInfo)}
         </p>
-        <Button onClick={() => setShowBidPlaced(false)} className="overlay-btn">
+        <Button 
+          onClick={() => {
+              setShowBidPlaced(false);
+              setValue(undefined);
+            }
+          } 
+          className="overlay-btn">
           Đóng
         </Button>
       </MetaplexOverlay>

@@ -148,7 +148,7 @@ export const WalletModal: FC = () => {
                   close();
                 }}
               >
-                Connect to {wallet.name}
+                Kết nối đến ví {wallet.name}
               </Button>
             );
           })}
@@ -177,8 +177,8 @@ export const WalletModalProvider: FC<{ children: ReactNode }> = ({
           : base58;
 
       notify({
-        message: 'Wallet update',
-        description: 'Connected to wallet ' + keyToDisplay,
+        message: 'Kết nối ví',
+        description: 'Đã kết nối ví ' + keyToDisplay,
       });
     }
   }, [publicKey]);
@@ -186,8 +186,8 @@ export const WalletModalProvider: FC<{ children: ReactNode }> = ({
   useEffect(() => {
     if (!publicKey && connected) {
       notify({
-        message: 'Wallet update',
-        description: 'Disconnected from wallet',
+        message: 'Ngắt kết nối ví',
+        description: 'Đã ngắt kết nối khỏi ví',
       });
     }
     setConnected(!!publicKey);
