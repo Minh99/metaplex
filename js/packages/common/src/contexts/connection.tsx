@@ -34,7 +34,7 @@ export type ENDPOINT_NAME =
   // | 'mainnet-beta'
   // | 'mainnet-beta-solana'
   // | 'mainnet-beta-serum'
-  | 'testnet'
+  // | 'testnet'
   | 'devnet'
   // | 'localnet'
   // | 'lending';
@@ -65,12 +65,12 @@ export const ENDPOINTS: Array<Endpoint> = [
   //   url: 'https://solana-api.projectserum.com/',
   //   chainId: ChainId.MainnetBeta,
   // },
-  {
-    name: 'testnet',
-    label: 'testnet',
-    url: clusterApiUrl('testnet'),
-    chainId: ChainId.Testnet,
-  },
+  // {
+  //   name: 'testnet',
+  //   label: 'testnet',
+  //   url: clusterApiUrl('testnet'),
+  //   chainId: ChainId.Testnet,
+  // },
   {
     name: 'devnet',
     label: 'devnet',
