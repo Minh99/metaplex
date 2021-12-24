@@ -273,12 +273,10 @@ export function useSettlementAuctions({
     if (bidsToClaim.length || validDiscoveredEndedAuctions[auctionViewKey] > 0)
       notifications.push({
         id: auctionViewKey,
-        title: 'You have an ended auction that needs settling!',
+        title: 'Bạn có một phiên bán đã kết thúc cần giải quyết!',
         description: (
-          <span>
-            One of your auctions ended and it has monies that can be claimed.
-            For more detail,{' '}
-            <Link to={`/auction/${auctionKey}/billing`}>click here.</Link>
+          <span className='info'>
+            <Link to={`/auction/${auctionKey}/billing`}>xem chi tiết.</Link>
           </span>
         ),
         action: async () => {
@@ -414,11 +412,10 @@ export function Notifications() {
 
   notifications.push({
     id: 'none',
-    title: 'Search for other auctions.',
+    title: 'Tìm kiếm các bài đăng đã kết thúc khác của bạn',
     description: (
       <span>
-        Load all auctions (including defectives) by pressing here. Then you can
-        close them.
+       {/* Tìm kiếm các bài đăng đã kết thúc khác của bạn */}
       </span>
     ),
     action: async () => {

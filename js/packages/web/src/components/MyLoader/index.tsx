@@ -21,8 +21,8 @@ export const CardLoader = () => (
 export const ThreeDots = () => (
   <ContentLoader
     viewBox="0 0 212 200"
-    height={200}
-    width={212}
+    height={100}
+    width={100}
     backgroundColor="transparent"
     style={{
       width: '100%',

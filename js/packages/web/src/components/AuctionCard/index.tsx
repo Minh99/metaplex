@@ -626,7 +626,7 @@ export const AuctionCard = ({
                 )}
               </Button>
             )}
-          {showPlaceBid ?
+          {showPlaceBid && wallet.publicKey?.toBase58() !== auctionView.auctionManager.authority?
             (
               <div className="show-place-bid">
                 <AmountLabel
@@ -821,7 +821,8 @@ export const AuctionCard = ({
           ) : (
             auctionView.isInstantSale &&
             !isAlreadyBought && !purchaseFinished && (
-              auctionView.auction.info.state === 1 ?
+              // auctionView.auction.info.state === 1
+              // ?
               <Button
                 type="primary"
                 size="large"
@@ -846,17 +847,20 @@ export const AuctionCard = ({
                 style={{ marginTop: 20, width: '100%' }}
               >
                 {actionButtonContent}
-
-              </Button> :
-              auctionView.auctionManager.authority === wallet.publicKey?.toBase58() ?
-              <Button 
-                type="primary"
-                size="large"
-                className="ant-btn secondary-btn"
-                style={{ marginTop: 20, width: '100%' }}
-              >
-                <Link to={`/auction/${auctionView.auction.pubkey}/billing`}>Chuyển đến màn hình rút tiền</Link>
-              </Button> : <></>
+              </Button>
+              // :
+              // auctionView.auctionManager.authority === wallet.publicKey?.toBase58() 
+              // ?
+              // <Button 
+              //   type="primary"
+              //   size="large"
+              //   className="ant-btn secondary-btn"
+              //   style={{ marginTop: 20, width: '100%' }}
+              // >
+              //   <Link to={`/auction/${auctionView.auction.pubkey}/billing`}>Chuyển đến màn hình rút tiền</Link>
+              // </Button> 
+              // : 
+              // <></>
             )
           ))}
         {!hideDefaultAction && !wallet.connected && (

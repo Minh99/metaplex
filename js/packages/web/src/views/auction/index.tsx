@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Button, Card, Carousel, Col, List, Row, Skeleton } from 'antd';
 import { AuctionCard } from '../../components/AuctionCard';
 import { Connection } from '@solana/web3.js';
@@ -42,6 +42,8 @@ import { ClickToCopy } from '../../components/ClickToCopy';
 import { useTokenList } from '../../contexts/tokenList';
 import { Tooltip } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
+import { CardLoader, ThreeDots } from '../../components/MyLoader';
+import { ArtCard } from '../../components/ArtCard';
 
 
 export const AuctionItem = ({
@@ -95,8 +97,13 @@ export const AuctionView = () => {
   const { pullAuctionPage } = useMeta();
   const wallet = useWallet();
   useEffect(() => {
-    pullAuctionPage(id);
-  }, []);
+    if (!auction?.auction.info.ended()){
+      const timer = setTimeout(() => {
+        pullAuctionPage(id);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  });
 
   let edition = '';
   if (art.type === ArtType.NFT) {
@@ -113,7 +120,7 @@ export const AuctionView = () => {
   const hasDescription = data === undefined || data.description === undefined;
   const description = data?.description;
   const attributes = data?.attributes;
-
+  const [isLoading, setIsLoading] = useState(false);
   const tokenInfo = useTokenList()?.mainnetTokens.filter(
     m => m.address == auction?.auction.info.tokenMint,
   )[0];
@@ -149,7 +156,7 @@ export const AuctionView = () => {
   var taker = auction?.auction?.info?.bidState?.bids[0]?.key;
   // creators[0].address
 
-  
+
   if (width < 768) {
     return (
       <Row
@@ -430,14 +437,24 @@ export const AuctionView = () => {
               </div>
             </Col>
           </Row>
-
           {!auction && <Skeleton paragraph={{ rows: 6 }} />}
           {auction && (
             <AuctionCard auctionView={auction} hideDefaultAction={false} />
           )}
+          <a style={{ fontSize: '1.4rem', float:'right' }} onClick={() => {
+            setIsLoading(true)
+            setTimeout(function() {
+              setIsLoading(false)
+            }, 2000);
+            pullAuctionPage(id)
+          }}>Cập nhật lịch sử</a>
+          {isLoading && 
+            <div style={{height: '20px'}}>
+              <ThreeDots />
+            </div>
+          }
           { <AuctionBids auctionView={auction} />}
           {/* {!auction?.isInstantSale && <AuctionBids auctionView={auction} />} */}
-
         </Col>
       </Row>
     );
@@ -639,6 +656,15 @@ export const AuctionBids = ({
   const { width } = useWindowDimensions();
   const wallet = useWallet();
   const [showHistoryModal, setShowHistoryModal] = useState<boolean>(false);
+  const {isLoading, pullAuctionPage } = useMeta();
+  const { id } = useParams<{ id: string }>();
+
+  // setTimeout(function () {
+  //   pullAuctionPage(id)
+  // }, 2000);
+  // useEffect(()=>{
+  //   pullAuctionPage(id)
+  // },[]);
 
   const winnersCount = auctionView?.auction.info.bidState.max.toNumber() || 0;
   const activeBids = auctionView?.auction.info.bidState.bids || [];
@@ -697,7 +723,9 @@ export const AuctionBids = ({
               }
             </>
           :
-          <h6 style={{ wordSpacing: '3px' }} className={'info-title'}> Lịch sử đấu giá </h6>
+          <>
+            <h6 style={{ wordSpacing: '3px', height: '50px' }} className={'info-title'}> Lịch sử đấu giá </h6>
+          </>
         }
 
         {bidLines.slice(0, 10)}
