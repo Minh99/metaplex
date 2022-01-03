@@ -14,10 +14,6 @@ import {
 import { ConnectButton } from '@oyster/common';
 
 const getDefaultLinkActions = (connected: boolean) => {
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const handleChange = event => {
-    setSearchTerm(event.target.value);
-  };
   
   return [
     <Link to={`/`} key={'explore'}>
@@ -29,18 +25,6 @@ const getDefaultLinkActions = (connected: boolean) => {
     <Link to={`/artists`} key={'artists'}>
       <Button className="app-btn">Người Chế  Tạo</Button>
     </Link>,
-    <Input
-      type="text"
-      placeholder="Nhập token sản phẩm"
-      value={searchTerm}
-      onChange={handleChange}
-      style={{ backgroundColor: 'white', color: 'black', fontSize: '1.4rem', lineHeight: '1.2rem', border: '1px solid gray', borderRadius: '5px', padding: '0 0 0 5px', width: '400px', marginLeft: '2rem'}}
-    />,
-    <Button style={{color: 'black', fontSize: '1.4rem', lineHeight: '1.2rem', border: '1px solid gray', borderRadius: '5px', padding: '5px 15px', width: 'fit-content', marginLeft: '1rem'}}> 
-      <Link to={`/art/${searchTerm}`} style={{color: 'black'}}>
-        Tìm kiếm 
-      </Link>
-    </Button>
   ];
 };
 
@@ -51,7 +35,8 @@ const DefaultActions = ({ vertical = false }: { vertical?: boolean }) => {
       style={{
         display: 'flex',
         flexDirection: vertical ? 'column' : 'row',
-        lineHeight: '0'
+        lineHeight: '0',
+        marginTop: '0.5rem'
       }}
     >
       {getDefaultLinkActions(connected)}
@@ -63,7 +48,10 @@ const MetaplexMenu = () => {
   const { width } = useWindowDimensions();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const { connected } = useWallet();
-
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const handleChange = event => {
+    setSearchTerm(event.target.value);
+  };
   if (width < 768)
     return (
       <>
@@ -121,13 +109,31 @@ const MetaplexMenu = () => {
       </>
     );
 
-  return <DefaultActions />;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: 'fit-content', marginBottom: '-0.5rem' }}>
+      <DefaultActions />
+      <div style={{ width: '100%', height: 'fit-content', display: 'flex', justifyContent: 'space-between', marginBottom: '0', marginTop: '0.5rem' }}>
+        <Input
+          type="text"
+          placeholder="Nhập địa chỉ sản phẩm"
+          value={searchTerm}
+          onChange={handleChange}
+          style={{ height:'fit-content', backgroundColor: 'white', color: '#6a6a84', fontSize: '1.2rem', lineHeight: '1.2rem', border: '1px solid gray', borderRadius: '2px', padding: '5px 15px', margin: '0 1rem' }}
+        />,
+        <Button style={{ color: '#6a6a84', fontSize: '1.2rem', lineHeight: '1.2rem', border: '1px solid gray', borderRadius: '2px', padding: '5px 15px', width: 'fit-content', margin: '0 1rem' }}>
+          <Link to={searchTerm !== "" ? `/art/${searchTerm}` : ``} style={{ color: '#6a6a84' }}>
+            Tìm kiếm
+          </Link>
+        </Button>
+      </div>
+    </div>
+  );
 };
 
 export const LogoLink = () => {
   return (
     <Link to={`/`}>
-      <h1 style={{color:'black', margin:'0', fontSize: '42px', marginRight:'2rem'}}>MVD</h1> 
+      <h1 style={{ color: 'black', margin: '0', fontSize: '42px', marginRight: '2rem' }}>MVD</h1>
     </Link>
   );
 };

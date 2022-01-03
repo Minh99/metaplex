@@ -153,9 +153,9 @@ export function useCollapseWrappedSol({
   if (showNotification) {
     notifications.push({
       id: 'unsettled',
-      title: 'Unsettled funds!',
+      title: 'Các khoản tiền chưa giải quyết được!',
       description:
-        'You have unsettled royalties in your personal escrow account.',
+        'Bạn có tiền chưa được giải quyết trong tài khoản ký quỹ cá nhân của mình.',
       action: async () => {
         try {
           const ata = await getPersonalEscrowAta(wallet);

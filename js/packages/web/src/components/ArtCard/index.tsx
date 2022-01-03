@@ -52,14 +52,14 @@ export const ArtCard = (props: ArtCardProps) => {
   const art = useArt(pubkey);
   creators = art?.creators || creators || [];
   name = art?.title || name || ' ';
-
+  
   let badge = '';
   if (art.type === ArtType.NFT) {
-    badge = 'Unique';
+    badge = `${art.mint}`; //'Unique';
   } else if (art.type === ArtType.Master) {
-    badge = 'NFT 0';
+    badge = `${art.mint}`;
   } else if (art.type === ArtType.Print) {
-    badge = `${art.edition} of ${art.supply}`;
+    badge = `${art.mint}`; //`${art.edition} of ${art.supply}`;
   }
 
   const card = (
@@ -110,7 +110,7 @@ export const ArtCard = (props: ArtCardProps) => {
                 )}
               </>
             )} */}
-            <div className="edition-badge">{badge}</div>
+            <div className="edition-badge">{badge === "undefined" ? '' : badge}</div>
             {count && (
               <div className="edition-badge">Selected count: {count}</div>
             )}

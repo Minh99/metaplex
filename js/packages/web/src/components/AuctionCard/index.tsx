@@ -63,6 +63,7 @@ import { useActionButtonContent } from './hooks/useActionButtonContent';
 import { endSale } from './utils/endSale';
 import { useInstantSaleState } from './hooks/useInstantSaleState';
 import { useTokenList } from '../../contexts/tokenList';
+import { isAdmin } from '../../views/home/components/SalesList/hooks/useSales/utils';
 
 async function calculateTotalCostOfRedeemingOtherPeoplesBids(
   connection: Connection,
@@ -230,7 +231,7 @@ export const AuctionCard = ({
   const [purchaseFinished, setPurchaseFinished] = useState<boolean>(false);
 
   const [showWarningModal, setShowWarningModal] = useState<boolean>(false);
-  const [printingCost, setPrintingCost] = useState<number>();
+  const [printingCost, setPrintingCost] = useState<number>(0);
 
   const { accountByMint } = useUserAccounts();
 
@@ -318,8 +319,10 @@ export const AuctionCard = ({
     (minBid && value < minBid) ||
     loading ||
     !accountByMint.get(QUOTE_MINT.toBase58()) ||
-    minBid >= balance.balance;
-
+    minBid >= balance.balance ||
+    value < parseFloat(formatTokenAmount(bids[0]?.info?.lastBid))
+    ;
+  
   const [isContainInAuction, setIsContain] = useState(false);
 
   useEffect(() => {
@@ -338,9 +341,7 @@ export const AuctionCard = ({
       if (showPlaceBid) setShowPlaceBid(false);
     }
 
-    
-
-  }, [wallet.connected]);
+  }, [wallet.connected, minBid]);
 
   const endInstantSale = async () => {
     setLoading(true);
@@ -494,11 +495,26 @@ export const AuctionCard = ({
 
   const actionButtonContent = useActionButtonContent(auctionView);
 
+  const [isContainMe, getIsContainMe] = useState(false);
+  const [isContainMeCheck10time, isContainMeCheck10times] = useState(0);
+
+  const arrayColumn = (arr, n) => arr.map(x => x[n]);
+
+  // check contain me in bidState
+  if(!isAdmin(wallet.publicKey?.toBase58()) && auctionView.auction.info.ended() && auctionView.auction?.info?.bidState?.bids?.length > 0 && isContainMeCheck10time < 10) {
+    getIsContainMe(arrayColumn(auctionView.auction.info.bidState.bids, 'key').find(function (key) {
+      return key == wallet.publicKey?.toBase58();
+    }) == undefined ? false : true);
+    isContainMeCheck10times(isContainMeCheck10time + 1);
+  }
+  
+
   if (shouldHide) {
     return <></>;
   }
   // console.log(auctionView.auction.info);
   // console.log(priceFloor + " : " + balance.balance);
+  // console.log(auctionView.auction.info);
   
   return (
     <div className="auction-container" style={style}>
@@ -531,9 +547,11 @@ export const AuctionCard = ({
               </span>
             }
             {wallet?.publicKey &&
-              auctionView.auctionManager.authority ===
-              wallet.publicKey.toBase58() &&
+              auctionView.auctionManager.authority ===  wallet.publicKey.toBase58() && auctionView.auction.info.bidState.bids.length !== 0 &&
               (<Link to={`/auction/${auctionView.auction.pubkey}/billing`}>Xem thông tin.</Link>)
+            }
+            { auctionView.auction.info.bidState.bids.length === 0 &&
+                (<Link to={`#`}>Không có người tham gia phiên đấu này.</Link>)
             }
           </div>
         )}
@@ -550,6 +568,7 @@ export const AuctionCard = ({
             !hideDefaultAction &&
             wallet.connected &&
             auctionView.auction.info.ended() && (
+              <>
               <Button
                 className="secondary-btn"
                 disabled={
@@ -614,17 +633,17 @@ export const AuctionCard = ({
                 ) : eligibleForAnything ? (
                   `Nhận sản phẩm`
                 ) : (
-                  `${wallet?.publicKey &&
-                    auctionView.auctionManager.authority !==
-                    wallet.publicKey.toBase58()
-                    ? 'Thu hồi lại Sol'
-                    : 
-                    auctionView.auction.info.bidState.bids.length === 0 ?
-                    'Thu hồi lại sản phẩm' :
-                    ''
+                  `${wallet?.publicKey && auctionView.auctionManager.authority !== wallet.publicKey.toBase58()
+                    ? (isContainMe ? 'Thu hồi lại Sol' : '')
+                    : (auctionView.auction.info.bidState.bids.length === 0 ? 'Thu hồi lại sản phẩm' : '')
                   }`
                 )}
               </Button>
+              {
+                auctionView.auction.info.bidState.bids.length === 0 && (printingCost / LAMPORTS_PER_MINT) !== 0 && 
+                <span className='info' style={{ display: 'block', margin: '0 1rem', paddingTop: '1rem'}}>Bạn sẽ mất một khoản phí là ◎ {printingCost / LAMPORTS_PER_MINT} để thực hiện việc trao đổi này.</span>
+              }
+              </>
             )}
           {showPlaceBid && wallet.publicKey?.toBase58() !== auctionView.auctionManager.authority?
             (
@@ -645,7 +664,9 @@ export const AuctionCard = ({
               </div>
             ) : (
               <div className="actions-place-bid">
-                <HowAuctionsWorkModal buttonClassName="black-btn" />
+                {!isAdmin(wallet.publicKey?.toBase58()) && 
+                  <HowAuctionsWorkModal buttonClassName="black-btn" />
+                }
                 {!hideDefaultAction &&
                   !auctionView.auction.info.ended() &&
                   (wallet.connected &&
@@ -743,7 +764,7 @@ export const AuctionCard = ({
                     placeholder={
                       minBid === 0
                         ? `Nhập giá thầu`
-                        : `Giá thầu phải lớn hơn ${minBid} ${symbol}`
+                        : `Giá thầu phải từ ${formatAmount(minBid)} ${symbol} trở lên`
                     }
                   />
                 </div>
@@ -888,8 +909,7 @@ export const AuctionCard = ({
         )}
         {gapBidInvalid && (
           <span style={{ color: 'red' }}>
-            Your bid needs to be at least {gapTick}% larger than an existing bid
-            during gap periods to be eligible.
+            Giá thầu của bạn cần phải lớn hơn ít nhất {gapTick}% so với giá thầu hiện tại trong các khoảng thời gian chênh lệch để đủ điều kiện
           </span>
         )}
         {!loading && value !== undefined && showPlaceBid && invalidBid && (
@@ -928,7 +948,7 @@ export const AuctionCard = ({
         </Button>
       </MetaplexOverlay>
 
-      <MetaplexOverlay visible={showEndingBidModal}>
+      {/* <MetaplexOverlay visible={showEndingBidModal}>
         <Confetti />
         <h1
           className="title"
@@ -946,7 +966,7 @@ export const AuctionCard = ({
             fontSize: '2rem',
           }}
         >
-          Chương trình giảm giá của bạn đã kết thúc, vui lòng xem NFT của bạn trong{' '}
+          Bạn đã kết thúc phiên đăng bán này, vui lòng xem NFT của bạn trong{' '}
           <Link to="/artworks">kho lưu trữ</Link>.
         </p>
         <Button
@@ -955,7 +975,7 @@ export const AuctionCard = ({
         >
           Đóng
         </Button>
-      </MetaplexOverlay>
+      </MetaplexOverlay> */}
 
       <MetaplexOverlay visible={showRedeemedBidModal}>
         <Confetti />
@@ -987,7 +1007,7 @@ export const AuctionCard = ({
         </Button>
       </MetaplexOverlay>
 
-      <MetaplexModal
+      {/* <MetaplexModal 
         visible={showWarningModal}
         onCancel={() => setShowWarningModal(false)}
         bodyStyle={{
@@ -997,7 +1017,7 @@ export const AuctionCard = ({
         <h3 style={{ color: 'white' }}>
           Thông báo: Bạn sẽ mất một khoản phí là ◎ {(printingCost || 0) / LAMPORTS_PER_MINT} để thực hiện việc trao đổi này.
         </h3>
-      </MetaplexModal>
+      </MetaplexModal> */}
     </div >
   );
 };

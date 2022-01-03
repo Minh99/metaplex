@@ -35,7 +35,7 @@ export type ENDPOINT_NAME =
   // | 'mainnet-beta-solana'
   // | 'mainnet-beta-serum'
   // | 'testnet'
-  | 'devnet'
+  'devnet'
   // | 'localnet'
   // | 'lending';
 
@@ -76,7 +76,7 @@ export const ENDPOINTS: Array<Endpoint> = [
     label: 'devnet',
     url: clusterApiUrl('devnet'),
     chainId: ChainId.Devnet,
-  },
+  }
 ];
 
 const DEFAULT_ENDPOINT = ENDPOINTS[0];

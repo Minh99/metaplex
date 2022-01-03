@@ -8,7 +8,7 @@ export const LoaderProvider: FC = ({ children }) => {
     <>
       <div className={`loader-container ${isLoading ? 'active' : ''}`}>
         <div className="loader-block">
-          <div className="loader-title">loading</div>
+          <div className="loader-title">VUI LÒNG ĐỢI TRONG GIÂY LÁT</div>
           <Spinner />
         </div>
       </div>

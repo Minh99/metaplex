@@ -6,7 +6,8 @@ import { useConnectionConfig } from '@oyster/common';
 export const ViewOn = ({ id }: { id: string }) => {
   const { endpoint } = useConnectionConfig();
   const art = useArt(id);
-
+  console.log(art);
+  
   return (
     <>
       <Col>

@@ -189,7 +189,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const onError = useCallback((error: WalletError) => {
     console.error(error);
     notify({
-      message: "Wallet error",
+      message: "Lỗi kết nối ví",
       description: error.message,
     });
   }, []);

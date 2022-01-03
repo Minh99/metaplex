@@ -25,19 +25,20 @@ interface BlockhashAndFeeCalculator {
   feeCalculator: FeeCalculator;
 }
 
-export type ENV = "mainnet-beta" | "testnet" | "devnet" | "localnet";
+// export type ENV = "mainnet-beta" | "testnet" | "devnet" | "localnet";
+export type ENV = "devnet";
 
 export const ENDPOINTS = [
-  {
-    name: "mainnet-beta" as ENV,
-    endpoint: "https://api.mainnet-beta.solana.com",
-    ChainId: ChainId.MainnetBeta,
-  },
+  // {
+  //   name: "mainnet-beta" as ENV,
+  //   endpoint: "https://api.mainnet-beta.solana.com",
+  //   ChainId: ChainId.MainnetBeta,
+  // },
   {
     name: "devnet" as ENV,
     endpoint: "https://api.devnet.solana.com",
     ChainId: ChainId.Devnet,
-  },
+  }
 ];
 
 const DEFAULT = ENDPOINTS[0].endpoint;

@@ -44,6 +44,7 @@ import { Tooltip } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import { CardLoader, ThreeDots } from '../../components/MyLoader';
 import { ArtCard } from '../../components/ArtCard';
+import { Spinner } from '../../components/Loader';
 
 
 export const AuctionItem = ({
@@ -88,6 +89,7 @@ export const AuctionItem = ({
 export const AuctionView = () => {
   const { width } = useWindowDimensions();
   const { id } = useParams<{ id: string }>();
+  const isCreate = id.search('-create') == -1 ? false : true;
   const { endpoint } = useConnectionConfig();
   const auction = useAuction(id);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -96,20 +98,34 @@ export const AuctionView = () => {
   const creators = useCreators(auction);
   const { pullAuctionPage } = useMeta();
   const wallet = useWallet();
+  const [isLoadingg, setLoadingg] = useState(isCreate);
+
+  if (isCreate) {
+    setTimeout(() => {
+      setLoadingg(false);
+      const url = window.location.href;
+      try { window.location.replace(url.replace('-create', '')); } 
+      catch(e) { window.location.replace(url.replace('-create', '')); }
+      // history.push(`/auction/${id.replace('-create', '')}`);
+      // window.location.replace(url.replace('-create', ''));
+      window.location.reload();
+    }, 70000)
+  }
+
   useEffect(() => {
-    if (!auction?.auction.info.ended()){
+    if (!auction?.auction.info.ended()) {
       const timer = setTimeout(() => {
         pullAuctionPage(id);
       }, 1000);
       return () => clearTimeout(timer);
     }
-  });
+  },[auction]);
 
   let edition = '';
   if (art.type === ArtType.NFT) {
-    edition = 'Unique';
+    edition = 'Duy nhất';
   } else if (art.type === ArtType.Master) {
-    edition = 'NFT 0';
+    edition = 'Duy nhất';
   } else if (art.type === ArtType.Print) {
     edition = `${art.edition} of ${art.supply}`;
   }
@@ -150,8 +166,6 @@ export const AuctionView = () => {
     );
   });
   // console.log(wallet.publicKey?.toBase58());
-
-  // console.log(creators[0].address);
 
   var taker = auction?.auction?.info?.bidState?.bids[0]?.key;
   // creators[0].address
@@ -292,171 +306,181 @@ export const AuctionView = () => {
     );
   } else {
     return (
-      <Row justify="center" ref={ref} gutter={[48, 0]} style={{ fontSize: '1.4rem' }} >
-        <Col span={24} md={10} className={'img-cont-500'}>
-          <div className="auction-view" style={{ minHeight: 300 }}>
-            <Carousel
-              autoplay={false}
-              afterChange={index => setCurrentIndex(index)}
-            >
-              {items}
-            </Carousel>
-          </div>
-          <h6 className={'about-nft-collection'}>
-            Thông tin mô tả {nftCount === 1 ? 'NFT' : 'COLLECTION'}
-          </h6>
-          <p className={'about-nft-collection a-description'}>
-            {hasDescription && <Skeleton paragraph={{ rows: 3 }} />}
-            {description ||
-              (winnerCount !== undefined && (
-                <div style={{ fontStyle: 'italic' }}>
-                  No description provided.
-                </div>
-              ))}
-          </p>
-          {attributes && (
-            <div className={'about-nft-collection a-attributes'}>
-              <h6>Attributes</h6>
-              <List grid={{ column: 4 }}>
-                {attributes.map((attribute, index) => (
-                  <List.Item key={`${attribute.value}-${index}`}>
-                    <Card title={attribute.trait_type}>{attribute.value}</Card>
-                  </List.Item>
-                ))}
-              </List>
+      <>
+        {isLoadingg &&
+          <div className={`loader-container ${isLoadingg ? 'active' : ''}`}>
+            <div className="loader-block">
+              <div className="loader-title">VUI LÒNG ĐỢI TRONG GIÂY LÁT</div>
+              <Spinner />
             </div>
-          )}
-          {/* {auctionData[id] && (
+          </div>
+        }
+        <Row justify="center" ref={ref} gutter={[48, 0]} style={{ fontSize: '1.4rem' }} >
+          <Col span={24} md={10} className={'img-cont-500'}>
+            <div className="auction-view" style={{ minHeight: 300 }}>
+              <Carousel
+                autoplay={false}
+                afterChange={index => setCurrentIndex(index)}
+              >
+                {items}
+              </Carousel>
+            </div>
+            <h6 className={'about-nft-collection'}>
+              Thông tin mô tả {nftCount === 1 ? 'NFT' : 'COLLECTION'}
+            </h6>
+            <p className={'about-nft-collection a-description'}>
+              {hasDescription && <Skeleton paragraph={{ rows: 3 }} />}
+              {description ||
+                (winnerCount !== undefined && (
+                  <div style={{ fontStyle: 'italic' }}>
+                    Không có mô tả.
+                  </div>
+                ))}
+            </p>
+            {attributes && (
+              <div className={'about-nft-collection a-attributes'}>
+                <h6>Attributes</h6>
+                <List grid={{ column: 4 }}>
+                  {attributes.map((attribute, index) => (
+                    <List.Item key={`${attribute.value}-${index}`}>
+                      <Card title={attribute.trait_type}>{attribute.value}</Card>
+                    </List.Item>
+                  ))}
+                </List>
+              </div>
+            )}
+            {/* {auctionData[id] && (
             <>
               <h6>About this Auction</h6>
               <p>{auctionData[id].description.split('\n').map((t: string) => <div>{t}</div>)}</p>
             </>
           )} */}
-        </Col>
-
-        <Col span={24} md={14}>
-          <h2 className="art-title">
-            {art.title || <Skeleton paragraph={{ rows: 0 }} />}
-          </h2>
-          <Row gutter={[44, 0]}>
-            <Col span={12} md={16}>
-              <div className={'info-container'}>
-                <div className={'info-component'}>
-                  <h6 className={'info-info'}>Tác giả</h6>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span>{<MetaAvatar creators={creators} />}</span>
-                    <Tooltip title="Sao chép địa chỉ">
-                      <div
-                        style={{
-                          fontWeight: 600,
-                          letterSpacing: '-0.02em',
-                          color: '#FFFFFF',
-                          display: 'flex',
-                          marginTop: '1rem',
-                        }}
-                        onClick={() =>
-                          navigator.clipboard.writeText(creators[0]?.address || '')
-                        }
-                      >
-                        <CopyOutlined />
-                        &nbsp;{creators[0]?.address ? shortenAddress(creators[0]?.address) : ""}
-                      </div>
-                    </Tooltip>
+          </Col>
+          <Col span={24} md={14}>
+            <h2 className="art-title">
+              {art.title || <Skeleton paragraph={{ rows: 0 }} />}
+            </h2>
+            <Row gutter={[44, 0]}>
+              <Col span={12} md={16}>
+                <div className={'info-container'}>
+                  <div className={'info-component'}>
+                    <h6 className={'info-info'}>Tác giả</h6>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <span>{<MetaAvatar creators={creators} />}</span>
+                      <Tooltip title="Sao chép địa chỉ">
+                        <div
+                          style={{
+                            fontWeight: 600,
+                            letterSpacing: '-0.02em',
+                            color: '#FFFFFF',
+                            display: 'flex',
+                            marginTop: '1rem',
+                          }}
+                          onClick={() =>
+                            navigator.clipboard.writeText(creators[0]?.address || '')
+                          }
+                        >
+                          <CopyOutlined />
+                          &nbsp;{creators[0]?.address ? shortenAddress(creators[0]?.address) : ""}
+                        </div>
+                      </Tooltip>
+                    </div>
                   </div>
-                </div>
-                <div className={'info-component'}>
-                  <h6 className={'info-info'}>Phiên bản </h6>
-                  <span>
-                    {(auction?.items.length || 0) > 1 ? 'Multiple' : edition}
-                  </span>
-                </div>
-                <div className={'info-component'}>
-                  <h6 className={'info-info'}>NFTS</h6>
-                  <span>
-                    {nftCount === undefined ? (
-                      <Skeleton paragraph={{ rows: 0 }} />
-                    ) : isOpen ? (
-                      'Open'
-                    ) : (
-                      nftCount
-                    )}
-                  </span>
-                </div>
-                <div className={'info-component'}>
-                  <h6 className={'info-info'}>Phương thức thanh toán</h6>
-                  <div style={{ display: 'flex' }}>
+                  <div className={'info-component'}>
+                    <h6 className={'info-info'}>Phiên bản </h6>
+                    <span>
+                      {(auction?.items.length || 0) > 1 ? 'Multiple' : edition}
+                    </span>
+                  </div>
+                  <div className={'info-component'}>
+                    <h6 className={'info-info'}>NFTS</h6>
                     <span>
                       {nftCount === undefined ? (
                         <Skeleton paragraph={{ rows: 0 }} />
+                      ) : isOpen ? (
+                        'Open'
                       ) : (
-                        `${tokenInfo?.name || 'Custom Token'} ($${tokenInfo?.symbol || 'CUSTOM'
-                        })`
+                        nftCount
                       )}
                     </span>
-                    <ClickToCopy
-                      className="copy-pubkey"
-                      copyText={
-                        tokenInfo
-                          ? tokenInfo?.address
-                          : auction?.auction.info.tokenMint || ''
-                      }
-                    />
                   </div>
-                </div>
-              </div>
-            </Col>
-            <Col span={12} md={8} className="view-on-container" style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)', display: 'flex', alignItems: 'center' }}>
-              <div className="info-view-container">
-                <div className="info-view">
-                  <h6 className="info-title" style={{ textAlign: 'center', marginBottom: '2rem' }}>Xem thông tin</h6>
-                  <div style={{ display: 'flex' }}>
-                    <Button
-                      className="tag"
-                      onClick={() => window.open(art.uri || '', '_blank')}
-                    >
-                      Arweave
-                    </Button>
-                    <Button
-                      className="tag"
-                      onClick={() => {
-                        const cluster = endpoint.name;
-                        const explorerURL = new URL(
-                          `account/${art?.mint || ''}`,
-                          'https://explorer.solana.com',
-                        );
-                        if (!cluster.includes('mainnet')) {
-                          explorerURL.searchParams.set('cluster', cluster);
+                  <div className={'info-component'}>
+                    <h6 className={'info-info'}>Phương thức thanh toán</h6>
+                    <div style={{ display: 'flex' }}>
+                      <span>
+                        {nftCount === undefined ? (
+                          <Skeleton paragraph={{ rows: 0 }} />
+                        ) : (
+                          `${tokenInfo?.name || 'Custom Token'} ($${tokenInfo?.symbol || 'CUSTOM'
+                          })`
+                        )}
+                      </span>
+                      <ClickToCopy
+                        className="copy-pubkey"
+                        copyText={
+                          tokenInfo
+                            ? tokenInfo?.address
+                            : auction?.auction.info.tokenMint || ''
                         }
-                        window.open(explorerURL.href, '_blank');
-                      }}
-                    >
-                      Solana
-                    </Button>
+                      />
+                    </div>
                   </div>
                 </div>
+              </Col>
+              <Col span={12} md={8} className="view-on-container" style={{ borderLeft: '1px solid rgba(255, 255, 255, 0.1)', display: 'flex', alignItems: 'center' }}>
+                <div className="info-view-container">
+                  <div className="info-view">
+                    <h6 className="info-title" style={{ textAlign: 'center', marginBottom: '2rem' }}>Xem thông tin</h6>
+                    <div style={{ display: 'flex' }}>
+                      <Button
+                        className="tag"
+                        onClick={() => window.open(art.uri || '', '_blank')}
+                      >
+                        Arweave
+                      </Button>
+                      <Button
+                        className="tag"
+                        onClick={() => {
+                          const cluster = endpoint.name;
+                          const explorerURL = new URL(
+                            `account/${art?.mint || ''}`,
+                            'https://explorer.solana.com',
+                          );
+                          if (!cluster.includes('mainnet')) {
+                            explorerURL.searchParams.set('cluster', cluster);
+                          }
+                          window.open(explorerURL.href, '_blank');
+                        }}
+                      >
+                        Solana
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+            {!auction && <Skeleton paragraph={{ rows: 6 }} />}
+            {auction && (
+              <AuctionCard auctionView={auction} hideDefaultAction={false} />
+            )}
+            <a style={{ fontSize: '1.4rem', float: 'right' }} onClick={() => {
+              setIsLoading(true)
+              setTimeout(function () {
+                setIsLoading(false)
+              }, 2000);
+              pullAuctionPage(id)
+            }}>Cập nhật lịch sử</a>
+            {isLoading &&
+              <div style={{ height: '20px' }}>
+                <ThreeDots />
               </div>
-            </Col>
-          </Row>
-          {!auction && <Skeleton paragraph={{ rows: 6 }} />}
-          {auction && (
-            <AuctionCard auctionView={auction} hideDefaultAction={false} />
-          )}
-          <a style={{ fontSize: '1.4rem', float:'right' }} onClick={() => {
-            setIsLoading(true)
-            setTimeout(function() {
-              setIsLoading(false)
-            }, 2000);
-            pullAuctionPage(id)
-          }}>Cập nhật lịch sử</a>
-          {isLoading && 
-            <div style={{height: '20px'}}>
-              <ThreeDots />
-            </div>
-          }
-          { <AuctionBids auctionView={auction} />}
-          {/* {!auction?.isInstantSale && <AuctionBids auctionView={auction} />} */}
-        </Col>
-      </Row>
+            }
+            {<AuctionBids auctionView={auction} />}
+            {/* {!auction?.isInstantSale && <AuctionBids auctionView={auction} />} */}
+          </Col>
+        </Row>
+      </>
+
     );
   }
 };
@@ -656,7 +680,7 @@ export const AuctionBids = ({
   const { width } = useWindowDimensions();
   const wallet = useWallet();
   const [showHistoryModal, setShowHistoryModal] = useState<boolean>(false);
-  const {isLoading, pullAuctionPage } = useMeta();
+  const { isLoading, pullAuctionPage } = useMeta();
   const { id } = useParams<{ id: string }>();
 
   // setTimeout(function () {
@@ -707,21 +731,21 @@ export const AuctionBids = ({
     <Row>
       <Col className="bids-lists" style={{ marginTop: '2rem' }}>
         {auctionView.isInstantSale ?
-            <>
-              <h6 style={{ wordSpacing: '3px', marginTop: '2rem' }} className={'info-title'}> 
-               { auctionView.auction.info.bidState.bids[0]?.key === wallet.publicKey?.toBase58() ? 
-                  "Bạn đã mua sản phẩm này" : 
-                  auctionView.auctionManager.authority === wallet.publicKey?.toBase58() ? 
-                    auctionView.auction.info.state !== 1 ? "Sản phẩm đã được bán" : "Đã có người muốn mua sản phẩm này" :
-                    "Đã có người mua sản phẩm này"
-               }
-               </h6>
-              {
+          <>
+            <h6 style={{ wordSpacing: '3px', marginTop: '2rem' }} className={'info-title'}>
+              {auctionView.auction.info.bidState.bids[0]?.key === wallet.publicKey?.toBase58() ?
+                "Bạn đã mua sản phẩm này" :
                 auctionView.auctionManager.authority === wallet.publicKey?.toBase58() ?
-                <span>{ auctionView.auction.info.state == 1 && "Vui lòng đợi người mua xác nhận!"} </span> :
-                <span></span>
+                  auctionView.auction.info.state !== 1 ? "Sản phẩm đã được bán" : "Đã có người muốn mua sản phẩm này" :
+                  "Đã có người mua sản phẩm này"
               }
-            </>
+            </h6>
+            {
+              auctionView.auctionManager.authority === wallet.publicKey?.toBase58() ?
+                <span>{auctionView.auction.info.state == 1 && "Vui lòng đợi người mua xác nhận!"} </span> :
+                <span></span>
+            }
+          </>
           :
           <>
             <h6 style={{ wordSpacing: '3px', height: '50px' }} className={'info-title'}> Lịch sử đấu giá </h6>

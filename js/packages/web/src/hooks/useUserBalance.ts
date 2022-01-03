@@ -5,6 +5,7 @@ import {
   useUserAccounts,
   WRAPPED_SOL_MINT,
 } from '@oyster/common';
+import { useWallet } from '@solana/wallet-adapter-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useSolPrice, useAllSplPrices } from '../contexts';
 
@@ -32,7 +33,7 @@ export function useUserBalance(
   )[0]?.tokenPrice;
   const tokenPrice =
     mintAddress == WRAPPED_SOL_MINT.toBase58() ? solPrice : altSplPrice;
-
+  const wallet = useWallet();
   const mintInfo = useMint(mint);
   const accounts = useMemo(() => {
     return userAccounts
@@ -45,10 +46,16 @@ export function useUserBalance(
   }, [userAccounts, mint, account]);
 
   const balanceLamports = useMemo(() => {
+    let balanceReal = 0;
+    accounts.forEach(element => {
+      if (element.info.address?.toBase58() === wallet.publicKey?.toBase58()) {
+        balanceReal = element.info.amount.toNumber();
+      }
+    });
     return accounts.reduce(
       // TODO: Edge-case: If a number is too big (more than 10Mil) and the decimals
       //    for the token are > 8, the lamports.toNumber() crashes, as it is more then 53 bits.
-      (res, item) => (res += item.info.amount.toNumber()),
+      () => balanceReal,
       0,
     );
   }, [accounts]);

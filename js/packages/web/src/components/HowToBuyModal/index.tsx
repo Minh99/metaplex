@@ -31,7 +31,7 @@ export const HowToBuyModal: React.FC<HowToBuyModalProps> = ({
         {
           title: `Kết nối ví của bạn`,
           imgSrc: '/modals/how-to-buy-3.jpg',
-          description: `Để kết nối ví của bạn, hãy nhấn vào “Connect Wallet” tại đây trên trang web. Chọn tùy chọn Phantom và ví của bạn sẽ kết nối. Sau đó, bạn có thể bắt đầu tham gia các hoạt động của chúng tôi đã cung cấp.`,
+          description: `Để kết nối ví của bạn, hãy nhấn vào “kết nối ví” tại đây trên trang web. Chọn tùy chọn Phantom và ví của bạn sẽ kết nối. Sau đó, bạn có thể bắt đầu tham gia các hoạt động của chúng tôi đã cung cấp.`,
           endElement: <ConnectButton className={'secondary-btn'} />,
         },
       ]}

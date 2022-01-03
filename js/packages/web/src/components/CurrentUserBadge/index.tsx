@@ -21,6 +21,7 @@ import {
 import { useMeta, useSolPrice } from '../../contexts';
 import { useTokenList } from '../../contexts/tokenList';
 import { TokenCircle } from '../Custom';
+import { isAdmin } from '../../views/home/components/SalesList/hooks/useSales/utils';
 
 ('@solana/wallet-adapter-base');
 
@@ -39,7 +40,7 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
   const { wallet, publicKey } = useWallet();
   const { whitelistedCreatorsByCreator, store } = useMeta();
   const pubkey = publicKey?.toBase58() || '';
-
+  const isAdminn = isAdmin(pubkey);
   const canCreate = useMemo(() => {
     return (
       store?.info?.public ||
@@ -52,7 +53,7 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
       {store &&
         (props.mobile ? (
           <div className="actions-buttons actions-user">
-            {canCreate && (
+            {canCreate && isAdminn && (
               <Link to={`/art/create`}>
                 <Button
                   onClick={() => {
@@ -84,7 +85,7 @@ const UserActions = (props: { mobile?: boolean; onClick?: any }) => {
               
             }}
           >
-            {canCreate && (
+            {canCreate && isAdminn && (
               <>
                 <Link to={`/art/create`} style={{ width: '100%' }}>
                   <Button className="metaplex-button-default" style={btnStyle}>
@@ -375,7 +376,7 @@ export const Cog = () => {
                 letterSpacing: '0.02em',
               }}
             >
-              NETWORK
+              Mạng
             </h5>
             <Select
               onSelect={network => {

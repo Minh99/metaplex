@@ -320,7 +320,7 @@ export const mintNFT = async (
     );
 
     notify({
-      message: 'Art created on Solana',
+      message: 'Sản phẩm đã được tạo trên Solana',
       description: (
         <a href={arweaveLink} target="_blank" rel="noopener noreferrer">
           Arweave Link

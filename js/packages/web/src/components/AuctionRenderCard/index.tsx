@@ -1,13 +1,14 @@
 import React from 'react';
 import { Card, CardProps } from 'antd';
 import { ArtContent } from '../ArtContent';
-import { AuctionView, useArt, useCreators } from '../../hooks';
+import { AuctionView, AuctionViewState, useArt, useCreators } from '../../hooks';
 import { AmountLabel } from '../AmountLabel';
 import { MetaAvatar } from '../MetaAvatar';
 import { AuctionCountdown } from '../AuctionNumbers';
 
 import { useAuctionStatus } from './hooks/useAuctionStatus';
 import { useTokenList } from '../../contexts/tokenList';
+import { LiveAuctionViewState } from '../../views/home/components/SalesList';
 
 export interface AuctionCard extends CardProps {
   auctionView: AuctionView;
@@ -20,18 +21,18 @@ export const AuctionRenderCard = (props: AuctionCard) => {
   const creators = useCreators(auctionView);
   const name = art?.title || ' ';
   const state = auctionView.state;
-  const tokenInfo = useTokenList().mainnetTokens.filter(m=>m.address == auctionView.auction.info.tokenMint)[0]
+  const tokenInfo = useTokenList().mainnetTokens.filter(m => m.address == auctionView.auction.info.tokenMint)[0]
   const { status, amount } = useAuctionStatus(auctionView);
-  
+
   const card = (
     <Card hoverable={true} className={`auction-render-card`} bordered={false}>
       <div className={'card-art-info'}>
         <div className={'card-artist-info'}>
           <MetaAvatar creators={creators.length ? [creators[0]] : undefined} />
           <span className={'artist-name'}>
-            {state === "2" ? 
-              'Xem kết quả' :
-              'Tham gia'
+            {state === AuctionViewState.Ended ?
+              'Xem kết quả' : state === AuctionViewState.Upcoming ? 'Chi tiết' :
+                'Tham gia'
             }
           </span>
         </div>
@@ -45,8 +46,11 @@ export const AuctionRenderCard = (props: AuctionCard) => {
         </div>
         <div className={'art-name'}>{name}</div>
         <div className={'art-auction-info'}>
-          <span className={'info-message'}>Thời gian còn lại</span>
-          <AuctionCountdown auctionView={auctionView} labels={false} />
+
+          <span className={'info-message'}>{auctionView.auction.info.endedAt !== undefined ? 'Thời gian còn lại' : ''}</span>
+          {auctionView.auction.info.endedAt !== undefined ?
+            <AuctionCountdown auctionView={auctionView} labels={false} /> : <div style={{ height: '60.67px' }}></div>
+          }
         </div>
       </div>
       <div className="card-bid-info text-center">

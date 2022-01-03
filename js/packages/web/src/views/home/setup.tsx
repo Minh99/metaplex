@@ -74,11 +74,10 @@ export const SetupView = () => {
       )}
       {wallet.connected && !store && (
         <>
-          <p>Store is not initialized yet</p>
-          <p>There must be some ◎ SOL in the wallet before initialization.</p>
+          <p>Cửa hàng chưa được khởi tạo</p>
+          <p>Phải có một số ◎ SOL trong ví trước khi khởi tạo.</p>
           <p>
-            After initialization, you will be able to manage the list of
-            creators
+            Sau khi khởi chạy, bạn sẽ có thể quản lý danh sách những người sáng tạo
           </p>
 
           <p>
@@ -88,7 +87,7 @@ export const SetupView = () => {
               loading={isInitalizingStore}
               onClick={initializeStore}
             >
-              Init Store
+              Khởi tạo Cửa hàng
             </Button>
           </p>
         </>
@@ -96,8 +95,8 @@ export const SetupView = () => {
       {wallet.connected && store && (
         <>
           <p>
-            To finish initialization please copy config below into{' '}
-            <b>packages/web/.env</b> and restart yarn or redeploy
+          Để kết thúc quá trình khởi tạo, vui lòng sao chép cấu hình bên dưới vào{' '}
+            <b>packages/web/.env</b> và restart yarn or redeploy
           </p>
           <SetupVariables
             storeAddress={storeAddress}

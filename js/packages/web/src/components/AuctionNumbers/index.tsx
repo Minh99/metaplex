@@ -23,8 +23,10 @@ export const AuctionCountdown = (props: {
   const state = useAuctionCountdown(auctionView);
   const ended = isEnded(state);
   // const ended = isEnded(state);
-
   
+  if (state?.seconds !== undefined && state.minutes == 0 && state.seconds <= 5 && state.seconds >= 1) {
+    window.location.reload();
+  }
   // const stop = () => {
   //   const a =  setEndNow(1,2,3,4);
   //   isEnded();
@@ -50,7 +52,6 @@ export const AuctionNumbers = (props: {
   const state = useAuctionCountdown(auctionView);
   const bids = useBidsForAuction(auctionView.auction.pubkey);
   const mintInfo = useMint(auctionView.auction.info.tokenMint);
-
   const participationFixedPrice =
     auctionView.auctionManager.participationConfig?.fixedPrice || 0;
   const participationOnly =
@@ -64,7 +65,6 @@ export const AuctionNumbers = (props: {
 
   const tokenInfo = useTokenList().mainnetTokens.filter(m=>m.address == auctionView.auction.info.tokenMint)[0]
   const ended = isEnded(state);
-
   return (
     <div style={{ maxWidth: 350 }}>
       {(!ended || auctionView.isInstantSale) && (

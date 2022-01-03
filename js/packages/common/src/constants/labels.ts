@@ -1,5 +1,5 @@
 export const LABELS = {
-  CONNECT_LABEL: 'Connect Wallet',
+  CONNECT_LABEL: 'Kết nối ví',
   AUDIT_WARNING:
     'Oyster is an unaudited software project used for internal purposes at the Solana Foundation. This app is not for public use.',
   FOOTER:

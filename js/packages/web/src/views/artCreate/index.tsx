@@ -219,8 +219,8 @@ export const ArtCreateView = () => {
             />
           )}
           {0 < step && step < 5 && (
-            <div style={{ margin: 'auto', width: 'fit-content' }}>
-              <Button onClick={() => gotoStep(step - 1)}>Trở lại</Button>
+            <div style={{ width: '100%', textAlign: 'center', marginTop: '2rem', marginBottom: '2rem' }}>
+              <Button className='five btn-pre' onClick={() => gotoStep(step - 1)}>Trở &nbsp; lại</Button>
             </div>
           )}
         </Col>
@@ -398,8 +398,7 @@ const UploadStep = (props: {
 
             if (sizeKB < 25) {
               setCoverArtError(
-                `The file ${file.name} is too small. It is ${Math.round(10 * sizeKB) / 10
-                }KB but should be at least 25KB.`,
+                `Tệp ${file.name} quá nhỏ. Vui lòng chỉ định tệp từ 25KB đến ${Math.round(10 * sizeKB) / 10}KB.`,
               );
               return;
             }
@@ -425,7 +424,7 @@ const UploadStep = (props: {
       {props.attributes.properties?.category !== MetadataCategory.Image && (
         <Row
           className="content-action"
-          style={{ marginBottom: 5, marginTop: 30 }}
+          style={{marginTop: '2rem' }}
         >
           <h3>{uploadMsg(props.attributes.properties?.category)}</h3>
           <Dragger
@@ -499,7 +498,7 @@ const UploadStep = (props: {
           />
         </Form.Item>
       </div>
-      <Row style={{ marginBottom: 5, marginTop: 30 }}>
+      <Row style={{marginTop: '2rem', justifyContent:'center' }}>
         <Button
           type="primary"
           size="large"
@@ -536,11 +535,12 @@ const UploadStep = (props: {
             props.setFiles(files);
             props.confirm();
           }}
-          style={{ marginTop: 24 }}
-          className="action-btn"
+          style={{ marginTop: '2rem' }}
+          className="four btn-next"
         >
           Tiếp tục
         </Button>
+        {/* <button className='four btn-next'>Change some <b>settings</b></button> */}
       </Row>
     </>
   );
@@ -697,7 +697,7 @@ const InfoStep = (props: {
               allowClear
             />
           </label>
-          <label className="action-field">
+          {/* <label className="action-field">
             <span className="field-title">Số lượng</span>
             <InputNumber
               placeholder="Số lượng"
@@ -712,7 +712,7 @@ const InfoStep = (props: {
               }}
               className="royalties-input"
             />
-          </label>
+          </label> */}
           {/* <label className="action-field">
             <span className="field-title">Thuộc tính</span>
           </label> */}
@@ -764,7 +764,7 @@ const InfoStep = (props: {
         </Col>
       </Row>
 
-      <Row>
+      <Row style={{marginTop: '2rem', justifyContent:'center' }}>
         <Button
           type="primary"
           size="large"
@@ -785,10 +785,17 @@ const InfoStep = (props: {
                 attributes: nftAttributes,
               });
 
+              props.setAttributes({
+                ...props.attributes,
+                properties: {
+                  ...props.attributes.properties,
+                  maxSupply: 1,
+                },
+              });
               props.confirm();
             });
           }}
-          className="action-btn"
+          className=" four btn-next"
         >
           Tiếp tục
         </Button>
@@ -942,8 +949,9 @@ const RoyaltiesStep = (props: {
             <span className="field-title" style={{ lineHeight: '2rem' }}>
               - Khi tạo sản phẩm thành công, quyền sở hữu sẽ là của bạn.<br />
               - Sản phẩm có thể được đưa lên Maketplace để rao bán hoặc có thể đưa đi đấu giá.<br />
-              - Sau khi bán thành công, bạn sẽ nhận được số tiền đã chuyển đổi và sản phẩm này sẽ thuộc quyền sở hữu của người mua.<br />&nbsp;&nbsp; 
-              Bạn sẽ chỉ còn định danh là người khởi tạo sản phẩm này và sẽ nhận được 10% tiền bản quyền nếu sản phẩm được đem đi bán thành công ở những lần sau đó khi người sở hữu sau đưa đi bán.
+              - Sau khi bán thành công, bạn sẽ nhận được số tiền đã chuyển đổi và sản phẩm này sẽ thuộc quyền sở hữu của người mua.<br />&nbsp;&nbsp;
+              Bạn sẽ chỉ còn định danh là người khởi tạo sản phẩm này và sẽ nhận được 10% tiền bản quyền nếu sản phẩm được đem<br />&nbsp;&nbsp;
+              đi bán thành công ở những lần sau đó khi người sở hữu sau đưa đi bán.
             </span>
             {/* <RoyaltiesSplitter
               creators={[...fixedCreators, ...creators]}
@@ -1000,7 +1008,7 @@ const RoyaltiesStep = (props: {
           </Text>
         </Row>
       )} */}
-      <Row>
+      <Row style={{justifyContent:'center'}}>
         <Button
           type="primary"
           size="large"
@@ -1045,7 +1053,7 @@ const RoyaltiesStep = (props: {
             });
             props.confirm();
           }}
-          className="action-btn"
+          className=" four btn-next"
         >
           Tiếp tục
         </Button>
@@ -1160,12 +1168,12 @@ const LaunchStep = (props: {
           }
         </div>
       </Row>
-      <Row>
+      <Row style={{marginTop: '2rem', justifyContent:'center' }}>
         <Button
           type="primary"
           size="large"
           onClick={props.confirm}
-          className="action-btn"
+          className="four btn-next"
         >
           Hoàn tất
         </Button>
@@ -1213,23 +1221,23 @@ const WaitingStep = (props: {
       }}
     >
       <Spin size="large" />
-      <Card>
+      <Card style={{ width: '40%', textAlign: 'center', fontSize: '1.4rem' }}>
         <Steps direction="vertical" current={props.step}>
           <Step
-            style={{ display:'none' }}
+            style={{ display: 'none' }}
             className={'white-description'}
             title="Minting"
             description="Starting Mint Process"
             icon={setIconForStep(props.step, 0)}
           />
           <Step
-            style={{ display:'none' }}
+            style={{ display: 'none' }}
             className={'white-description'}
             title="Preparing Assets"
             icon={setIconForStep(props.step, 1)}
           />
           <Step
-            style={{ display:'none' }}
+            style={{ display: 'none' }}
             className={'white-description'}
             title="Signing Metadata Transaction"
             description="Approve the transaction from your wallet"
@@ -1242,25 +1250,25 @@ const WaitingStep = (props: {
             icon={setIconForStep(props.step, 3)}
           />
           <Step
-            style={{ display:'none' }}
+            style={{ display: 'none' }}
             className={'white-description'}
             title="Waiting for Initial Confirmation"
             icon={setIconForStep(props.step, 4)}
           />
           <Step
-            style={{ display:'none' }}
+            style={{ display: 'none' }}
             className={'white-description'}
             title="Waiting for Final Confirmation"
             icon={setIconForStep(props.step, 5)}
           />
           <Step
-            style={{ display:'none' }}
+            style={{ display: 'none' }}
             className={'white-description'}
             title="Uploading to Arweave"
             icon={setIconForStep(props.step, 6)}
           />
           <Step
-            style={{ display:'none' }}
+            style={{ display: 'none' }}
             className={'white-description'}
             title="Updating Metadata"
             icon={setIconForStep(props.step, 7)}
@@ -1269,7 +1277,7 @@ const WaitingStep = (props: {
             className={'white-description'}
             title="Khởi tạo các giao dịch thanh toán"
             description="Phê duyệt giao dịch cuối cùng từ ví của bạn"
-            icon={setIconForStep(props.step, 8)}
+            icon={setIconForStep(props.step, 9)}
           />
         </Steps>
       </Card>
@@ -1302,10 +1310,10 @@ const Congrats = (props: {
     // TODO  - properly reset this components state on error
     return (
       <>
-        <div className="waiting-title">Sorry, there was an error!</div>
+        <div className="waiting-title">Xin lỗi, đã xảy ra lỗi!!</div>
         <p>{props.alert}</p>
         <Button onClick={_ => history.push('/art/create')}>
-          Back to Create NFT
+          Quay lại tạo sản phẩm NFT
         </Button>
       </>
     );
@@ -1324,10 +1332,10 @@ const Congrats = (props: {
           <span>&gt;</span>
         </Button> */}
         <Button
-          style={{ marginBottom:'1rem' }}
+          style={{ marginBottom: '1rem' }}
           className="metaplex-button"
           onClick={_ =>
-            history.push(`/art/${props.nft?.metadataAccount.toString()}`)
+            history.push(`/art/${props.nft?.metadataAccount.toString()}-create`)
           }
         >
           <span>Xem trong bộ sưu tập</span>

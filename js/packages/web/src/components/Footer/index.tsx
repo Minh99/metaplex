@@ -90,7 +90,7 @@ export const Footer = () => {
 
   return (
     <div className="footer-container">
-      <div className="footer-info">
+      {/* <div className="footer-info">
         {footerConf.showShopName ? (
           <div className="footer-community">
             <div className="sub-header">
@@ -119,10 +119,10 @@ export const Footer = () => {
             <NewsLetterForm />
           </div>
         ) : null}
-      </div>
+      </div> */}
       <div className="footer-foot">
         <div className="small-body footer-link">
-          2021 {LABELS.STORE_NAME} LLC, All rights reserved
+          17CT1 {LABELS.STORE_NAME}, Đồ án tốt nghiệp khóa 2017-2022
         </div>
       </div>
     </div>

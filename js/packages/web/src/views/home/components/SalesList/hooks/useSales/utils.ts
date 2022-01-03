@@ -14,3 +14,7 @@ export const sortSalesByDate = (auctions: Array<Sale>): Array<Sale> =>
 
     return aEndTime?.sub(bEndTime || new BN(0)).toNumber() || 0;
   });
+
+export const isAdmin = (address: string | undefined): Boolean => {
+  return address === '6RdYPZ7Ed7gJErBBkPKcaXbnt6frjz1CkCmTobbg4kaC';
+};

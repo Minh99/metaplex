@@ -61,6 +61,7 @@ import { useTokenList } from '../../contexts/tokenList';
 import { mintTo } from '@project-serum/serum/lib/token-instructions';
 import { TokenInfo } from '@solana/spl-token-registry';
 import { useCreator } from '../../hooks';
+import { isAdmin } from '../home/components/SalesList/hooks/useSales/utils';
 
 const { Option } = Select;
 const { Step } = Steps;
@@ -710,6 +711,7 @@ const CategoryStep = (props: {
   confirm: (category: AuctionCategory) => void;
 }) => {
   const wallet = useWallet();
+  const isAdminn = isAdmin(wallet.publicKey?.toBase58());
   const creator = useCreator(wallet.publicKey?.toBase58());
   const { width } = useWindowDimensions();
   return (
@@ -761,7 +763,7 @@ const CategoryStep = (props: {
               </div>
             </Button>
           </Row> */}
-          { wallet.publicKey?.toBase58() === '7NZmfttG7CSCSs6tMiG5SvTgrVuYNoA4jjvK4haDqoYN' &&
+          {isAdminn &&
             <Row >
               <Button
                 className="type-btn"
@@ -1562,12 +1564,13 @@ const TierTableStep = (props: {
   }
 
   useEffect(() => {
-
     if (props.attributes.tiers[0]) {
       setHasItem(true);
     }
+    if (props.attributes.tiers.length === 0) {
+      setHasItem(false);
+    }
   }, [props.attributes.tiers]);
-  // console.log(hasItem);
 
   return (
     <>
@@ -1785,27 +1788,30 @@ const TierTableStep = (props: {
               </Card>
             </Col>
           ))}
-          <Col xl={4}>
-            <Button
-              type="primary"
-              size="large"
-              onClick={() => {
-                const newTiers = newImmutableTiers(props.attributes.tiers);
-                const myNewTier = newTiers[configIndex];
-                myNewTier.items.push({});
-                props.setAttributes({
-                  ...props.attributes,
-                  tiers: newTiers,
-                });
-              }}
-              className="action-btn"
-            >
-              <PlusCircleOutlined />
-            </Button>
-          </Col>
+          {props.attributes.tiers[0].items.length === 0 &&
+            <Col xl={4}>
+              <Button
+                type="primary"
+                size="large"
+                onClick={() => {
+                  const newTiers = newImmutableTiers(props.attributes.tiers);
+                  const myNewTier = newTiers[configIndex];
+                  myNewTier.items.push({});
+                  props.setAttributes({
+                    ...props.attributes,
+                    tiers: newTiers,
+                  });
+                }}
+                className="action-btn"
+              >
+                <PlusCircleOutlined />
+              </Button>
+            </Col>
+          }
+
         </Row>
       ))}
-      {!hasItem &&
+      {(!hasItem || props.attributes.tiers == []) &&
         <Row>
           <Col xl={24}>
             <Button
@@ -2135,7 +2141,7 @@ const Congrats = (props: {
           <Button
             className="metaplex-button"
             onClick={_ =>
-              history.push(`/auction/${props.auction?.auction.toString()}`)
+              history.push(`/auction/${props.auction?.auction.toString()}-create`)
             }
           >
             <span>Xem</span>

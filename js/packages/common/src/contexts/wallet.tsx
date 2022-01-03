@@ -54,19 +54,18 @@ export const WalletModal: FC = () => {
   const phatomWallet = useMemo(() => getPhantomWallet(), []);
 
   return (
-    <MetaplexModal title="Connect Wallet" visible={visible} onCancel={close}>
-      <span
+    <MetaplexModal title="Kết nối ví" visible={visible} onCancel={close}>
+      {/* <span
         style={{
           color: 'rgba(255, 255, 255, 0.75)',
-          fontSize: '14px',
-          lineHeight: '14px',
-          fontFamily: 'GraphikWeb',
+          fontSize: '1.2rem',
+          lineHeight: '1.2rem',
           letterSpacing: '0.02em',
           marginBottom: 14,
         }}
       >
-        RECOMMENDED
-      </span>
+        Chọn ví
+      </span> */}
 
       <Button
         className="phantom-button metaplex-button"
@@ -77,7 +76,7 @@ export const WalletModal: FC = () => {
         }}
       >
         <img src={phatomWallet?.icon} style={{ width: '1.2rem' }} />
-        &nbsp;Connect to Phantom
+        &nbsp;Kết nối đến Phantom
       </Button>
       <Collapse
         ghost
@@ -117,7 +116,7 @@ export const WalletModal: FC = () => {
           )
         }
       >
-        <Panel
+        {/* <Panel
           header={
             <span
               style={{
@@ -128,7 +127,7 @@ export const WalletModal: FC = () => {
                 color: 'rgba(255, 255, 255, 255)',
               }}
             >
-              Other Wallets
+              Các ví khác (chưa hỗ trợ)
             </span>
           }
           key="1"
@@ -152,7 +151,7 @@ export const WalletModal: FC = () => {
               </Button>
             );
           })}
-        </Panel>
+        </Panel> */}
       </Collapse>
     </MetaplexModal>
   );
@@ -229,7 +228,7 @@ export const WalletProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const onError = useCallback((error: WalletError) => {
     console.error(error);
     notify({
-      message: 'Wallet error',
+      message: 'Lỗi kết nối ví',
       description: error.message,
     });
   }, []);
